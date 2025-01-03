@@ -20,7 +20,7 @@ new #[Layout('layouts.guest')] class extends Component
 
         Session::regenerate();
 
-        $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+        $this->redirectIntended(default: route('filament.admin.pages.dashboard', absolute: false), navigate: true);
     }
 }; ?>
 
@@ -65,6 +65,10 @@ new #[Layout('layouts.guest')] class extends Component
 
             <x-primary-button class="ms-3">
                 {{ __('Log in') }}
+            </x-primary-button>
+
+            <x-primary-button class="ms-3" type="button" onclick="window.location.href='{{ route('register') }}'">
+                {{ __('Register') }}
             </x-primary-button>
         </div>
     </form>
