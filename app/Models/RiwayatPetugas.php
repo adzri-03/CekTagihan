@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Pembacaan_meter extends Model
+class RiwayatPetugas extends Model
 {
     //
 }
