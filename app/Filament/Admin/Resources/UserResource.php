@@ -23,7 +23,9 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('name')->required(),
+                Forms\Components\TextInput::make('email')->required(),
+                Forms\Components\TextInput::make('password')->required(),
             ]);
     }
 
@@ -31,8 +33,9 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                //
-            ])
+                Tables\Columns\TextColumn::make('name'),
+                Tables\Columns\TextColumn::make('email'),
+                Tables\Columns\TextColumn::make('password'),                     ])
             ->filters([
                 //
             ])

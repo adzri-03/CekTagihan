@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class GolonganResource extends Resource
 {
     protected static ?string $model = Golongan::class;
+    protected static ?string $recordTitleAttribute = 'Golongan';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -23,7 +24,8 @@ class GolonganResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('harga')->required(),
+                Forms\Components\TextInput::make('golongan')->required(),
             ]);
     }
 
@@ -31,7 +33,9 @@ class GolonganResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('harga'),
+                Tables\Columns\TextColumn::make('golongan'),
+
             ])
             ->filters([
                 //

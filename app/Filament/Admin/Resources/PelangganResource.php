@@ -23,7 +23,10 @@ class PelangganResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('kode_pam')->required(),
+                Forms\Components\TextInput::make('nama')->required(),
+                Forms\Components\TextInput::make('alamat')->required(),
+                Forms\Components\TextInput::make('golongan_id')->required(),
             ]);
     }
 
@@ -31,7 +34,11 @@ class PelangganResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('kode_pam'),
+                Tables\Columns\TextColumn::make('nama'),
+                Tables\Columns\TextColumn::make('alamat'),
+                Tables\Columns\TextColumn::make('golongan_id'),
+
             ])
             ->filters([
                 //

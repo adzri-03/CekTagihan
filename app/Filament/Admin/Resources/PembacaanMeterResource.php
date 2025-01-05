@@ -23,7 +23,11 @@ class PembacaanMeterResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('pelanggan_id')->required(),
+                Forms\Components\TextInput::make('meter_awal')->required(),
+                Forms\Components\TextInput::make('meter_akhir')->required(),
+                Forms\Components\TextInput::make('pemakaian')->required(),
+                Forms\Components\TextInput::make('total')->required(),
             ]);
     }
 
@@ -31,7 +35,11 @@ class PembacaanMeterResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('pelanggan_id'),
+                Tables\Columns\TextColumn::make('meter_awal'),
+                Tables\Columns\TextColumn::make('meter_akhir'),
+                Tables\Columns\TextColumn::make('pemakaian'),
+                Tables\Columns\TextColumn::make('total'),
             ])
             ->filters([
                 //
