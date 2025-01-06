@@ -23,7 +23,7 @@ class PembacaanMeterResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('pelanggan_id')->required(),
+                Forms\Components\TextInput::make('customer_id')->required(),
                 Forms\Components\TextInput::make('meter_awal')->required(),
                 Forms\Components\TextInput::make('meter_akhir')->required(),
                 Forms\Components\TextInput::make('pemakaian')->required(),
