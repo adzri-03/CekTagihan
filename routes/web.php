@@ -1,13 +1,13 @@
 <?php
 
-use Illuminate\Http\Request;
+use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Config;
 use App\Http\Controllers\CustomerController;
 
-Route::view('/', 'welcome');
+Route::redirect('/', '/login');
 
-Route::view('dashboard', 'dashboard')
+Route::redirect('dashboard', '/admin')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 

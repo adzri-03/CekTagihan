@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('golongans', function (Blueprint $table) {
+        Schema::create('pembacaan_meters', function (Blueprint $table) {
             $table->id();
-            $table->float('harga')->default(0);
-            $table->string('golongan');
+            $table->foreignId('customer_id')->constrained()->onDelete('cascade');
+            $table->integer('meter_awal');
+            $table->integer('meter_akhir');
+            $table->integer('pemakaian');
+            $table->integer('total');
             $table->timestamps();
         });
     }
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('golongans');
+        Schema::dropIfExists('pembacaan_meters');
     }
 };
