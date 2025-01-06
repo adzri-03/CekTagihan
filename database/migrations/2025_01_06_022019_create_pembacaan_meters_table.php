@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('pembacaan_meters', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pelanggan_id')->constrained()->onDelete('cascade');
-            $table->integer('meter_aawal');
+            $table->foreignId('customer_id')->constrained()->onDelete('cascade');
+            $table->integer('meter_awal');
             $table->integer('meter_akhir');
             $table->integer('pemakaian');
             $table->integer('total');

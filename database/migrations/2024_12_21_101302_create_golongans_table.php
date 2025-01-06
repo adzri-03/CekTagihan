@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('golongans', function (Blueprint $table) {
             $table->id();
-            $table->float('harga');
+            $table->float('harga')->default(0);
             $table->string('golongan');
             $table->timestamps();
         });
