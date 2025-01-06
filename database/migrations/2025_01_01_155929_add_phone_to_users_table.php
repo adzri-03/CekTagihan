@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('riwayat_petugas', function (Blueprint $table) {
-            $table->id();
-            $table->integer('users_id');
-            $table->string('deskripsi');
-            $table->string('jenis_tindakan');
-            $table->integer('related_id');
-            $table->timestamps();
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('phone')->after('password');
         });
     }
 
@@ -26,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('riwayat_petugas');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('phone');
+        });
     }
 };

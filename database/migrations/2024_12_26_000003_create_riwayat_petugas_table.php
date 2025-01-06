@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pelanggans', function (Blueprint $table) {
+        Schema::create('riwayat_petugas', function (Blueprint $table) {
             $table->id();
-            $table->integer('kode_pam');
-            $table->string('nama');
-            $table->string('alamat');
-            $table->string('golongan_id');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->string('deskripsi');
+            $table->string('jenis_tindakan');
             $table->timestamps();
         });
     }
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pelanggans');
+        Schema::dropIfExists('riwayat_petugas');
     }
 };

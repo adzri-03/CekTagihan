@@ -78,50 +78,9 @@ class CustomerResource extends Resource
                 Tables\Actions\DeleteBulkAction::make(),
                 Tables\Actions\ForceDeleteBulkAction::make(),
                 Tables\Actions\RestoreBulkAction::make(),
-                Tables\Actions\BulkAction::make('generate_qr_codes')
-                    ->label('Generate')
-                    ->icon('heroicon-o-qr-code')
-                    ->action(function (Collection $records) {
-                        set_time_limit(300);
-                        $counter = 0;
-                        $html = `<html><head><title>Print QR Codes</title></head><body style="text-align: center;">`;
-                        foreach ($records as $customer) {
-                            if ($counter > 50) {
-                                break;
-                            }
-                            $data = [
-                                'id' => $customer->id,
-                                'pam_code' => $customer->pam_code,
-                                'name' => $customer->name,
-                                'address' => $customer->address,
-                                'phone' => $customer->phone,
-                            ];
-
-                            $path = public_path("qrcodes/{$customer->pam_code}.png");
-                            QrCode::format('png')
-                                ->size(500)
-                                ->generate(json_encode($data), $path);
-
-                            $url = asset("qrcodes/{$customer->pam_code}.png");
-                            $html .= "<div style='margin: 20px;'>
-                                        <img src='{$url}' alt='QR Code'>
-                                        <p>{$customer->name}</p>
-                                    </div>";
-
-                            $counter++;
-                        }
-
-                        $html .= '</body></html>';
-
-                        echo $html;
-
-                        Notification::make()
-                            ->title('QR Code sukses dibuat')
-                            ->success()
-                            ->send();
-                    }),
                 Tables\Actions\BulkAction::make('generatePDF')
                     ->label('PDF')
+                    ->icon('heroicon-o-qr-code')
                     ->action(function (Collection $records) {
                         $ids = $records->pluck('id')->toArray();
 

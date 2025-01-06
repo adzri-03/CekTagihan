@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('riwayat_pelanggans', function (Blueprint $table) {
-            $table->id();
-            $table->integer('pelanggan_id');
-            $table->string('deskripsi');
-            $table->string('jenis_riwayat');
-            $table->timestamps();
+        Schema::table('users', function(Blueprint $table) {
+            $table->string('role')->nullable()->after('password');
+            $table->string('status')->nullable()->after('role');
         });
     }
 
@@ -25,6 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('riwayat_pelanggans');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('role');
+            $table->dropColumn('status');
+        });
     }
 };
