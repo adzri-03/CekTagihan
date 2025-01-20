@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('pembacaan_meters', function (Blueprint $table) {
             $table->id();
             $table->foreignId('customer_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
-            $table->integer('meter_awal');
-            $table->integer('meter_akhir');
-            $table->integer('pemakaian');
-            $table->integer('total');
+            $table->integer('meter_awal')->default(0);
+            $table->integer('meter_akhir')->default(0);
+            $table->integer('pemakaian')->default(0);
+            $table->integer('total', 10,2)->default(0);
             $table->timestamps();
         });
     }

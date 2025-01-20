@@ -10,9 +10,19 @@ class RiwayatPetugas extends Model
     use HasFactory;
 
     protected $fillable =[
-        'users_id',
+        'user_id',
         'deskripsi',
         'jenis_tindakan',
         'related_id',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function pembacaanMeter()
+    {
+        return $this->belongsTo(PembacaanMeter::class, 'related_id');
+    }
 }
