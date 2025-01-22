@@ -17,7 +17,7 @@ class RiwayatPetugasResource extends Resource
 {
     protected static ?string $model = RiwayatPetugas::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-clock';
 
     public static function form(Form $form): Form
     {
@@ -43,7 +43,7 @@ class RiwayatPetugasResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                // Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
