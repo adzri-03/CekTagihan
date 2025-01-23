@@ -16,6 +16,11 @@ class Hitung extends Component
     public $isFormVisible = false;
     public $responseMessage;
 
+    public function customers() {
+        $customers = Customer::all();
+        return $customers;
+    }
+
     protected $listeners = [
         'scanSuccess' => 'handleScanSuccess'
     ];
@@ -62,6 +67,7 @@ class Hitung extends Component
 
     public function render()
     {
-        return view('livewire.front.hitung')->layout('layouts.master');
+        $customers = $this->customers();
+        return view('livewire.front.hitung', compact('customers'))->layout('layouts.master');
     }
 }

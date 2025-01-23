@@ -2,6 +2,29 @@
 @section('content')
     <section id="content"
         class="max-w-[640px] w-full min-h-screen mx-auto flex flex-col bg-[#F8F8F8] overflow-x-hidden pb-[122px] relative">
+        @forelse ($customers as $customer)
+            <table>
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Nama</th>
+                        <th>Alamat</th>
+                        <th>No. Handphone</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ $customer->id }}</td>
+                        <td>{{ $customer->name }}</td>
+                        <td>{{ $customer->address }}</td>
+                        <td>{{ $customer->phone }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        @empty
+            <p>No customers found.</p>
+        @endforelse
+
         <div class="mb-4 relative">
             <h2 class="text-lg font-bold">Scan QR Code</h2>
             <div id="reader" class="mt-4 relative"></div>
@@ -13,7 +36,6 @@
                 <p class="text-red-500 text-sm">{{ $message }}</p>
             @enderror
         </div>
-
         <!-- Bagian Form -->
         @if ($isFormVisible)
             <form wire:submit.prevent="submitForm">
