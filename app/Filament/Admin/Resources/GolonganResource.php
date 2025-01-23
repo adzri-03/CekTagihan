@@ -18,7 +18,7 @@ class GolonganResource extends Resource
     protected static ?string $model = Golongan::class;
     protected static ?string $recordTitleAttribute = 'Golongan';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
     public static function form(Form $form): Form
     {

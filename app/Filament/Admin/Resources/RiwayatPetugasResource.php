@@ -17,13 +17,13 @@ class RiwayatPetugasResource extends Resource
 {
     protected static ?string $model = RiwayatPetugas::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-clock';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('users_id')->required(),
+                Forms\Components\TextInput::make('user_id')->required(),
                 Forms\Components\TextInput::make('deskripsi')->required(),
                 Forms\Components\TextInput::make('jenis_tindakan')->required(),
                 Forms\Components\TextInput::make('related_id')->required(),
@@ -34,7 +34,7 @@ class RiwayatPetugasResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('users_id'),
+                Tables\Columns\TextColumn::make('user_id'),
                 Tables\Columns\TextColumn::make('deskripsi'),
                 Tables\Columns\TextColumn::make('jenis_tindakan'),
                 Tables\Columns\TextColumn::make('related_id'),
@@ -43,7 +43,7 @@ class RiwayatPetugasResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                // Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

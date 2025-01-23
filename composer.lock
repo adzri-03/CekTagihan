@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "527ec9af74672ef02088dea0d513d378",
+    "content-hash": "c925a61f1443cd8d4c665a54627297b1",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -1750,7 +1750,7 @@
                 "issues": "https://github.com/filamentphp/filament/issues",
                 "source": "https://github.com/filamentphp/filament"
             },
-            "time": "2025-01-10T12:48:52+00:00"
+            "time": "2024-12-17T13:03:07+00:00"
         },
         {
             "name": "fruitcake/php-cors",
