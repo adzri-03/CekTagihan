@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Config;
 use App\Http\Controllers\CustomerController;
 use App\Livewire\Front\Hitung;
+use App\Livewire\Front\ScanPage;
 
 Route::redirect('/', '/login');
 
@@ -22,5 +23,6 @@ Route::get('/index', function () {
     return view('livewire.front.index');
 })->name('front.index');
 Route::get('/hitung', Hitung::class)->name('front.hitung');
+Route::get('/scan', ScanPage::class)->name('front.scan');
 
 require __DIR__.'/auth.php';

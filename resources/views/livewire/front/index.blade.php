@@ -42,7 +42,7 @@
 
         <div id="Feature" class="px-[18px] relative z-10">
             <div class="bg-white p-[18px_16px] rounded-xl overflow-hidden grid grid-cols-4 gap-[27px]">
-                <a href="{{ route('front.hitung') }}">
+                <a href="{{ route('front.scan') }}">
                     <div class="flex flex-col items-center gap-2">
                         <div class="w-[35px] h-[35px] flex shrink-0">
                             <img src="https://img.icons8.com/?size=100&id=cX0dPS0YEepJ&format=png&color=000000" class="object-cover" alt="icon">
@@ -52,51 +52,6 @@
                 </a>
             </div>
         </div>
-        {{-- <div id="Menu-bar" class="fixed bottom-[24px] px-[18px] max-w-[640px] w-full z-30">
-            <div
-                class="bg-white p-[14px_12px] rounded-full flex items-center justify-center gap-8 shadow-[0_8px_30px_0_#0A093212]">
-                <a href="{{ route('front.index')}}">
-                    <div class="flex flex-col gap-1 items-center">
-                        <div class="w-6 h-6 flex shrink-0">
-                            <img src="assets/images/icons/home-active.svg" alt="icon">
-                        </div>
-                        <p class="text-xs leading-[18px] font-semibold text-[#4041DA]">Home</p>
-                    </div>
-                </a>
-                <a href="">
-                    <div class="flex flex-col gap-1 items-center">
-                        <div class="w-6 h-6 flex shrink-0">
-                            <img src="assets/images/icons/search-nonactive.svg" alt="icon">
-                        </div>
-                        <p class="text-xs leading-[18px] font-medium text-[#757C98]">Search</p>
-                    </div>
-                </a>
-                <a href="{{ route('front.hitung') }}">
-                    <div class="flex flex-col gap-1 items-center">
-                        <div class="w-6 h-6 flex shrink-0">
-                            <img src="https://img.icons8.com/?size=100&id=cX0dPS0YEepJ&format=png&color=000000" alt="icon">
-                        </div>
-                        <p class="text-xs leading-[18px] font-medium text-[#757C98]">Hitung</p>
-                    </div>
-                </a>
-                <a href="">
-                    <div class="flex flex-col gap-1 items-center">
-                        <div class="w-6 h-6 flex shrink-0">
-                            <img src="assets/images/icons/activity-nonactive.svg" alt="icon">
-                        </div>
-                        <p class="text-xs leading-[18px] font-medium text-[#757C98]">Activity</p>
-                    </div>
-                </a>
-                <a href="">
-                    <div class="flex flex-col gap-1 items-center">
-                        <div class="w-6 h-6 flex shrink-0">
-                            <img src="assets/images/icons/settings-nonactive.svg" alt="icon">
-                        </div>
-                        <p class="text-xs leading-[18px] font-medium text-[#757C98]">Settings</p>
-                    </div>
-                </a>
-            </div>
-        </div> --}}
         @livewire('components.menu-bar')
     </section>
 @endsection

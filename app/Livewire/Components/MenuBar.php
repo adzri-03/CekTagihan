@@ -12,7 +12,7 @@ class MenuBar extends Component
         [
             'name' => 'Hitung',
             'icon' => 'scan.png',
-            'route' => 'front.hitung',
+            'route' => 'front.scan',
         ]
     ];
 
