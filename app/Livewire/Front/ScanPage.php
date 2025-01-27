@@ -9,15 +9,12 @@ class ScanPage extends Component
 {
     public $customerId;
 
-    public function customers()
-    {
-        return Customer::all();
-    }
+    protected $listeners = ['handleScanSuccess'];
 
     public function handleScanSuccess($decodedText)
     {
+        info('QR Code scanned: ' . $decodedText); // Debug log
         $this->customerId = $decodedText;
-
         return redirect()->route('front.hitung', ['customerId' => $this->customerId]);
     }
 
@@ -26,5 +23,10 @@ class ScanPage extends Component
         return view('livewire.front.scan-page', [
             'customers' => $this->customers()
         ]);
+    }
+
+    private function customers()
+    {
+        return Customer::all();
     }
 }

@@ -63,14 +63,16 @@ class CustomerResource extends Resource
                         ];
 
                         $path = public_path("qrcodes/{$record->id}.png");
-                        QrCode::format('png')
+                        $img = QrCode::format('png')
                             ->size(500)
-                            ->generate(json_encode($data), $path);
+                            ->generate(json_encode($data));
 
                         Notification::make()
                             ->title('QR Code sukses dibuat')
                             ->success()
                             ->send();
+
+                        return response($img)->header('Content-type', 'image/png');
                     }),
         ])
         ->bulkActions([

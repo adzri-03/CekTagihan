@@ -1,6 +1,4 @@
-@extends('layouts.master')
-
-@section('content')
+<div>
     <section id="content"
         class="max-w-[640px] w-full min-h-screen mx-auto flex flex-col bg-[#F8F8F8] overflow-x-hidden pb-[122px] relative">
         <div class="mx-4 my-4">
@@ -34,7 +32,7 @@
             </div>
 
             <!-- Tombol untuk Scanner -->
-            <div id="Menu-bar" class="fixed bottom-[24px] w-full flex justify-center items-center z-30">
+            <div class="fixed bottom-[24px] w-full flex justify-center items-center z-30">
                 <div
                     class="p-3 bg-blue-500 hover:bg-blue-600 text-white rounded-full shadow-lg transition-all transform hover:scale-105">
                     <button onclick="openModal()" class="w-[32px]" aria-label="Mulai Scanner">
@@ -72,7 +70,6 @@
 
                     <!-- Modal Footer -->
                     <div class="bg-gray-50 px-4 py-3 flex justify-between items-center">
-                        <p id="loading-spinner" class="text-blue-500 font-medium hidden">Menginisialisasi kamera...</p>
                         <button onclick="closeModal()" type="button"
                             class="inline-flex justify-center rounded-md bg-red-500 text-white px-3 py-2 text-sm font-semibold hover:bg-red-600">
                             Cancel
@@ -82,91 +79,104 @@
             </div>
         </div>
     </section>
-@endsection
+    <script type="text/javascript">
+        // Pastikan script dijalankan setelah DOM loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Pastikan Livewire sudah dimuat
+            if (typeof window.Livewire !== 'undefined') {
+                let html5QrCode = null;
 
-@push('scripts')
-    <script>
-        let html5QrCode = null;
+                // Definisikan fungsi-fungsi sebagai properti window
+                window.openModal = function() {
+                    const modal = document.getElementById('scannerModal')
+                    modal.classList.remove('hidden')
+                    startScanner()
+                }
 
-        function openModal() {
-            const modal = document.getElementById('scannerModal')
-            modal.classList.remove('hidden')
-            startScanner()
-        }
+                window.closeModal = function() {
+                    const modal = document.getElementById('scannerModal')
+                    modal.classList.add('hidden')
+                    stopScanner()
+                }
 
-        function closeModal() {
-            const modal = document.getElementById('scannerModal')
-            modal.classList.add('hidden')
-            stopScanner()
-        }
+                // Sisanya sama seperti kode Anda...
+                async function startScanner() {
+                    if (html5QrCode) {
+                        await html5QrCode.stop();
+                    }
 
-        // Fungsi untuk memulai scanner
-        async function startScanner() {
-            // Hentikan scanner jika sudah berjalan
-            if (html5QrCode) {
-                await html5QrCode.stop();
-            }
-
-            // Inisialisasi scanner
-            html5QrCode = new Html5Qrcode("reader");
-            const config = {
-                fps: 10,
-                qrbox: {
-                    width: 300,
-                    height: 300
-                },
-                showTorchButtonIfSupported: true,
-            };
-
-            try {
-                const devices = await Html5Qrcode.getCameras(); // Mendapatkan daftar kamera
-
-                if (devices && devices.length > 0) {
-                    // Pilih kamera belakang jika tersedia
-                    const cameraId = devices.length > 1 ? devices[1].id : devices[0].id;
-
-                    // Mulai scanner
-                    await html5QrCode.start(cameraId, config,
-                        (decodedText) => {
-                            console.log("QR Code detected:", decodedText);
-
-                            // Emit hasil scan ke Livewire
-                            Livewire.emit('handleScanSuccess', decodedText);
-
-                            // Hentikan scanner setelah berhasil membaca QR code
-                            html5QrCode.stop();
+                    html5QrCode = new Html5Qrcode("reader");
+                    const config = {
+                        fps: 10,
+                        qrbox: {
+                            width: 300,
+                            height: 300
                         },
-                        (errorMessage) => {
-                            console.log("QR Error:", errorMessage);
+                        showTorchButtonIfSupported: true,
+                    };
+
+                    try {
+                        const devices = await Html5Qrcode.getCameras();
+                        if (devices && devices.length > 0) {
+                            const cameraId = devices.length > 1 ? devices[1].id : devices[0].id;
+                            await html5QrCode.start(cameraId, config,
+                                (decodedText) => {
+                                    console.log("QR Code detected:", decodedText);
+                                    window.Livewire.emit('handleScanSuccess', decodedText);
+                                    html5QrCode.stop();
+                                    closeModal();
+                                },
+                                (errorMessage) => {
+                                    console.log("QR Error:", errorMessage);
+                                }
+                            );
+                        } else {
+                            console.error("No camera found!");
+                            document.getElementById('scan-error-message').classList.remove('hidden');
+                            document.getElementById('scan-error-message').innerText =
+                                'Tidak ada kamera yang ditemukan.';
                         }
-                    );
-                } else {
-                    console.error("No camera found!");
-                    document.getElementById('scan-error-message').innerText = 'Tidak ada kamera yang ditemukan.';
-                }
-            } catch (err) {
-                console.error('Error starting scanner:', err);
-                let errorMessage = 'Terjadi kesalahan saat memulai scanner.';
-
-                if (err.name === 'NotAllowedError') {
-                    errorMessage = 'Izin kamera ditolak. Mohon izinkan akses kamera dan coba lagi.';
-                } else if (err.name === 'NotFoundError') {
-                    errorMessage = 'Kamera tidak ditemukan.';
-                } else if (err.name === 'NotReadableError') {
-                    errorMessage = 'Kamera sedang digunakan oleh aplikasi lain.';
+                    } catch (err) {
+                        console.error('Error starting scanner:', err);
+                        let errorMessage = 'Terjadi kesalahan saat memulai scanner.';
+                        if (err.name === 'NotAllowedError') {
+                            errorMessage = 'Izin kamera ditolak. Mohon izinkan akses kamera dan coba lagi.';
+                        } else if (err.name === 'NotFoundError') {
+                            errorMessage = 'Kamera tidak ditemukan.';
+                        } else if (err.name === 'NotReadableError') {
+                            errorMessage = 'Kamera sedang digunakan oleh aplikasi lain.';
+                        }
+                        document.getElementById('scan-error-message').classList.remove('hidden');
+                        document.getElementById('scan-error-message').innerText = errorMessage;
+                    }
                 }
 
-                document.getElementById('scan-error-message').innerText = errorMessage;
-            }
-        }
+                async function stopScanner() {
+                    if (html5QrCode) {
+                        try {
+                            await html5QrCode.stop();
+                            html5QrCode = null;
+                        } catch (err) {
+                            console.error('Error stopping scanner:', err);
+                        }
+                    }
+                }
 
-        // Fungsi untuk menghentikan scanner
-        async function stopScanner() {
-            if (html5QrCode) {
-                await html5QrCode.stop(); // Hentikan scanner
-                html5QrCode = null; // Reset scanner
-                document.getElementById('scan-error-message').innerText = 'Scanner telah dihentikan.';
+                // Tambahkan event listener untuk cleanup
+                window.addEventListener('beforeunload', () => {
+                    stopScanner();
+                });
             }
-        }
+        });
+
+        console.log('Script loaded');
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded');
+            if (typeof window.Livewire !== 'undefined') {
+                console.log('Livewire detected');
+            } else {
+                console.log('Livewire not found');
+            }
+        });
     </script>
-@endpush
+</div>

@@ -22,7 +22,7 @@ Route::get('/customers/generate-pdf', [CustomerController::class, 'generatePDF']
 Route::get('/index', function () {
     return view('livewire.front.index');
 })->name('front.index');
-Route::get('/hitung', Hitung::class)->name('front.hitung');
+Route::get('/hitung/{customer}', Hitung::class)->name('front.hitung');
 Route::get('/scan', ScanPage::class)->name('front.scan');
 
 require __DIR__.'/auth.php';
