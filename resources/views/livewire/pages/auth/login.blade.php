@@ -63,11 +63,11 @@ new #[Layout('layouts.guest')] class extends Component
                 </a>
             @endif
 
-            <x-primary-button class="ms-3">
+            <x-primary-button class="ms-3  bg-black text-white hover:bg-gray-800">
                 {{ __('Log in') }}
             </x-primary-button>
 
-            <x-primary-button class="ms-3" type="button" onclick="window.location.href='{{ route('register') }}'">
+            <x-primary-button class="ms-3 bg-black text-white hover:bg-gray-800" type="button" onclick="window.location.href='{{ route('register') }}'">
                 {{ __('Register') }}
             </x-primary-button>
         </div>
