@@ -14,9 +14,6 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <script type="text/javascript">
-        console.log('Script after Vite loaded');
-    </script>
     @livewireStyles
 </head>
 
@@ -25,10 +22,6 @@
 
     @livewireScripts
     @stack('scripts')
-    <script type="text/javascript">
-        console.log('Livewire status:', typeof window.Livewire !== 'undefined' ? 'Loaded' : 'Not Loaded');
-    </script>
-
 </body>
 
 </html>
