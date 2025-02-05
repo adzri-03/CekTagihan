@@ -122,7 +122,7 @@
                             await html5QrCode.start(cameraId, config,
                                 (decodedText) => {
                                     console.log("QR Code detected:", decodedText);
-                                    window.Livewire.emit('handleScanSuccess', decodedText);
+                                    window.$wire.dispatch('handleScanSuccess', decodedText);
                                     html5QrCode.stop();
                                     closeModal();
                                 },

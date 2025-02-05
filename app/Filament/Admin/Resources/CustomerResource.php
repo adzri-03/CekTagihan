@@ -16,12 +16,19 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Admin\Resources\CustomerResource\Pages;
 use App\Filament\Admin\Resources\CustomerResource\RelationManagers;
+use App\Jobs\GeneratePdfJob;
+use Illuminate\Support\Facades\Log;
 
 class CustomerResource extends Resource
 {
     protected static ?string $model = Customer::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-identification';
+
+    protected $listener = [
+        'echo-private:App.Models.User.{id},database-notifications.sent' => '$refresh',
+        'notification' => 'handleNotification'
+    ];
 
     public static function form(Form $form): Form
     {
@@ -53,44 +60,63 @@ class CustomerResource extends Resource
                     ->label('Generate')
                     ->icon('heroicon-o-qr-code')
                     ->color('success')
-                    ->action(function ($record) {
-                        $data = [
-                            'id' => $record->id,
-                            'pam_code' => $record->pam_code,
-                            'name' => $record->name,
-                            'address' => $record->address,
-                            'phone' => $record->phone,
-                        ];
+                    ->action(fn($record) => self::generateQrCode($record))
+                    ->modalHeading('QR Code berhasil dibuat!')
+                    ->modalContent(fn($record) => view('components.qr-modal', ['qr_code' => self::generateQrCode($record)])),
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
+                    Tables\Actions\BulkAction::make('generatePDF')
+                        ->label('PDF')
+                        ->icon('heroicon-o-qr-code')
+                        ->action(function (Collection $records) {
+                            $customerIds = $records->pluck('id')->toArray();
 
-                        $path = public_path("qrcodes/{$record->id}.png");
-                        $img = QrCode::format('png')
-                            ->size(500)
-                            ->generate(json_encode($data));
+                            GeneratePdfJob::dispatch(
+                                $customerIds,
+                                auth()->id()
+                            )->onQueue('pdf');
+                            Log::info('generating pdf');
 
-                        Notification::make()
-                            ->title('QR Code sukses dibuat')
-                            ->success()
-                            ->send();
-
-                        return response($img)->header('Content-type', 'image/png');
-                    }),
-        ])
-        ->bulkActions([
-            Tables\Actions\BulkActionGroup::make([
-                Tables\Actions\DeleteBulkAction::make(),
-                Tables\Actions\ForceDeleteBulkAction::make(),
-                Tables\Actions\RestoreBulkAction::make(),
-                Tables\Actions\BulkAction::make('generatePDF')
-                    ->label('PDF')
-                    ->icon('heroicon-o-qr-code')
-                    ->action(function (Collection $records) {
-                        $ids = $records->pluck('id')->toArray();
-
-                        return redirect()->route('customers.generate-pdf', ['ids' => $ids]);
-                    })
-                    ->requiresConfirmation(),
+                            Notification::make()
+                                ->title('PDF sedang diproses. Anda akan mendapat notifikasi ketika selesai.')
+                                ->success()
+                                ->send();
+                        })
+                        ->requiresConfirmation(),
                 ]),
             ]);
+    }
+
+    public static function generateQrCode($record)
+    {
+        $data = [
+            'id' => $record->id,
+            'pam_code' => $record->pam_code,
+            'name' => $record->name,
+            'address' => $record->address,
+            'phone' => $record->phone,
+        ];
+
+        $img = QrCode::format('png')
+            ->size(500)
+            ->generate(json_encode($data));
+        $base64 = 'data:image/png;base64,' . base64_encode($img);
+
+        Notification::make()
+            ->title('QR Code sukses dibuat')
+            ->success()
+            ->send();
+
+        return $base64;
+    }
+
+    public function handleNotification($notification)
+    {
+        $this->dispatch('notification', $notification);
     }
 
     public static function getRelations(): array
