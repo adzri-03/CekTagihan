@@ -2,7 +2,7 @@
 @section('content')
     <section class="max-w-[640px] w-full mx-auto">
         <h2 class="text-lg font-bold">Form Pengisian</h2>
-        <p>ID Customer: {{ $customerId }}</p>
+        <p>ID Customer: {{ $customer->id }}</p>
         <form>
             <!-- Tambahkan field sesuai kebutuhan -->
             <div class="mt-4">

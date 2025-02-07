@@ -2,6 +2,15 @@
     <section id="content"
         class="max-w-[640px] w-full min-h-screen mx-auto flex flex-col bg-[#F8F8F8] overflow-x-hidden pb-[122px] relative">
         <div class="mx-4 my-4">
+
+     @if ($selectedCustomer)
+        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4">
+            <p class="font-bold">Data Pelanggan</p>
+            <p>Nama: {{ $selectedCustomer->name }}</p>
+            <p>Alamat: {{ $selectedCustomer->address }}</p>
+            <p>No. HP: {{ $selectedCustomer->phone }}</p>
+        </div>
+    @endif
             <!-- Halaman Utama -->
             <h2 class="text-lg font-bold">Daftar Pelanggan</h2>
             <div class="overflow-x-auto">
@@ -80,17 +89,39 @@
         </div>
     </section>
     <script type="text/javascript">
-        // Pastikan script dijalankan setelah DOM loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            // Pastikan Livewire sudah dimuat
-            if (typeof window.Livewire !== 'undefined') {
-                let html5QrCode = null;
-
-                // Definisikan fungsi-fungsi sebagai properti window
-                window.openModal = function() {
-                    const modal = document.getElementById('scannerModal')
-                    modal.classList.remove('hidden')
-                    startScanner()
+        let html5QrCode = null;
+        let isScanning = false;
+    
+        function openModal() {
+            document.getElementById('scannerModal').classList.remove('hidden');
+            startScanner();
+        }
+    
+        function closeModal() {
+            document.getElementById('scannerModal').classList.add('hidden');
+            stopScanner();
+        }
+    
+        async function startScanner() {
+            if (isScanning) return; // Mencegah scanner dipanggil dua kali
+    
+            isScanning = true;
+            html5QrCode = new Html5Qrcode("reader");
+    
+            const config = {
+                fps: 10,
+                qrbox: { width: 300, height: 300 },
+                showTorchButtonIfSupported: true,
+            };
+    
+            try {
+                const devices = await Html5Qrcode.getCameras();
+                if (devices.length > 0) {
+                    const cameraId = devices.length > 1 ? devices[1].id : devices[0].id;
+                    await html5QrCode.start(cameraId, config, processScan, handleScanError);
+                } else {
+                    showError("Kamera tidak ditemukan.");
+                    isScanning = false;
                 }
 
                 window.closeModal = function() {
@@ -166,17 +197,72 @@
                 window.addEventListener('beforeunload', () => {
                     stopScanner();
                 });
+            } catch (err) {
+                handleCameraError(err);
+                isScanning = false; (scan-page)
             }
-        });
-
-        console.log('Script loaded');
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM loaded');
-            if (typeof window.Livewire !== 'undefined') {
-                console.log('Livewire detected');
-            } else {
-                console.log('Livewire not found');
+        }
+    
+        function processScan(decodedText) {
+            console.log("QR Code scanned:", decodedText);
+            stopScanner();
+            closeModal();
+            sendScanResult(decodedText);
+        }
+    
+        function handleScanError(errorMessage) {
+            console.log("QR Error:", errorMessage);
+        }
+    
+        function handleCameraError(err) {
+            let message = "Terjadi kesalahan saat mengakses kamera.";
+            if (err.name === 'NotAllowedError') message = "Akses kamera ditolak. Mohon izinkan akses.";
+            if (err.name === 'NotFoundError') message = "Kamera tidak ditemukan.";
+            if (err.name === 'NotReadableError') message = "Kamera sedang digunakan oleh aplikasi lain.";
+            showError(message);
+            isScanning = false;
+        }
+    
+        async function stopScanner() {
+            if (html5QrCode && isScanning) {
+                try {
+                    await html5QrCode.stop();
+                    html5QrCode = null;
+                    isScanning = false;
+                } catch (err) {
+                    console.error("Error stopping scanner:", err);
+                }
             }
-        });
+        }
+    
+        function sendScanResult(decodedText) {
+            fetch("{{ route('front.process-scan') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+                },
+                body: JSON.stringify({ scannedCode: decodedText })
+                // $customer = Customer::find($request->scannedCode);
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = data.redirect_url;
+                } else {
+                    showError(data.message || "Pelanggan tidak ditemukan.");
+                }
+            })
+            .catch(() => showError("Terjadi kesalahan saat menghubungi server."));
+        }
+    
+        function showError(message) {
+            const errorElement = document.getElementById("scan-error-message");
+            errorElement.textContent = message;
+            errorElement.classList.remove("hidden");
+        }
+    
+        window.addEventListener('beforeunload', stopScanner);
     </script>
+    
 </div>

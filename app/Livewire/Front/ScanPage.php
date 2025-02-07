@@ -7,26 +7,30 @@ use Livewire\Component;
 
 class ScanPage extends Component
 {
-    public $customerId;
+    public $customer;
 
     protected $listeners = ['handleScanSuccess'];
 
     public function handleScanSuccess($decodedText)
     {
         info('QR Code scanned: ' . $decodedText); // Debug log
-        $this->customerId = $decodedText;
-        return redirect()->route('front.hitung', ['customerId' => $this->customerId]);
+
+        $customer = Customer::find($decodedText);
+
+        if ($customer) {
+            session()->flash('message', 'Pelanggan ditemukan: ' . $customer->name);
+            $this->dispatchBrowserEvent('qr-scanned-success', ['url' => route('front.hitung', ['customerId' => $customer->id])]);
+        } else {
+            session()->flash('error', 'Pelanggan tidak ditemukan!');
+            $this->dispatchBrowserEvent('qr-scanned-fail', ['message' => 'Pelanggan tidak ditemukan!']);
+        }
     }
 
     public function render()
     {
         return view('livewire.front.scan-page', [
-            'customers' => $this->customers()
+            'customers' => Customer::all(), 
+            'selectedCustomer' => $this->customer
         ]);
-    }
-
-    private function customers()
-    {
-        return Customer::all();
     }
 }
