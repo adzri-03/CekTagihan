@@ -32,26 +32,32 @@ Route::get('/index', function () {
 Route::get('/hitung/{customer}', Hitung::class)->name('front.hitung');
 Route::get('/scan', ScanPage::class)->name('front.scan');
 
+
 Route::get('/download-pdf/{filename}', function ($filename) {
     return Storage::disk('public')->download($filename);
 })->name('filament.download-pdf');
 
+
+
 Route::post('/process-scan', function (Request $request) {
-    
-    $customer = Customer::findOrFail($request->scanned_code);
+    $data = json_decode($request->scanned_code, true);
+
+    if (!$data || !isset($data['id'])) {
+        return response()->json(['success' => false, 'message' => 'Format QR tidak valid']);
+    }
+
+    $customer = Customer::find($data['id']);
 
     if ($customer) {
         return response()->json([
             'success' => true,
-            'redirect_url' => route('front.hitung', ['customer' => $customer]),
+            'redirect_url' => route('front.hitung', ['customer' => $customer->id]),
         ]);
     }
 
-    return response()->json([
-        'success' => false,
-        'message' => 'Pelanggan tidak ditemukan',
-    ]);
+    return response()->json(['success' => false, 'message' => 'Pelanggan tidak ditemukan']);
 })->name('front.process-scan');
+
 
 
 require __DIR__.'/auth.php';

@@ -234,26 +234,50 @@
                 }
             }
         }
-    
+        
+        let scanning = false;
+
         function sendScanResult(decodedText) {
+            if (scanning) return; // Mencegah multiple scan
+            scanning = true;
+
+            console.log("🔍 QR Code scanned:", decodedText);
+
+            setTimeout(() => { // Delay untuk mencegah konflik dengan stopScanner
+                if (typeof stopScanner === "function") {
+                    try {
+                        stopScanner(); // Hentikan scanner jika berjalan
+                        console.log("✅ Scanner stopped successfully.");
+                    } catch (e) {
+                        console.warn("⚠️ Scanner stop error:", e);
+                    }
+                }
+            }, 500);
+
             fetch("{{ route('front.process-scan') }}", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
                 },
-                body: JSON.stringify({ scannedCode: decodedText })
-                // $customer = Customer::find($request->scannedCode);
+                body: JSON.stringify({ scanned_code: decodedText }) // Pastikan key sesuai dengan backend
             })
             .then(response => response.json())
             .then(data => {
+                console.log("📡 Server response:", data);
                 if (data.success) {
+                    scanning = false; // Reset flag sebelum redirect
                     window.location.href = data.redirect_url;
                 } else {
                     showError(data.message || "Pelanggan tidak ditemukan.");
+                    scanning = false; // Reset flag jika gagal
                 }
             })
-            .catch(() => showError("Terjadi kesalahan saat menghubungi server."));
+            .catch(error => {
+                console.error("❌ Fetch error:", error);
+                showError("Terjadi kesalahan saat menghubungi server.");
+                scanning = false; // Reset flag jika terjadi error
+            });
         }
     
         function showError(message) {

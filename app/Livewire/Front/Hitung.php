@@ -3,18 +3,21 @@
 namespace App\Livewire\Front;
 
 use Livewire\Component;
+use App\Models\Customer;
 
 class Hitung extends Component
 {
-    public $customerId;
+    public $customer;
 
-    public function mount($customerId)
+    public function mount(Customer $customer)
     {
-        $this->customerId = $customerId;
+        $this->customer = $customer;
     }
 
     public function render()
     {
-        return view('livewire.form-page');
+        return view('livewire.front.hitung', [
+            'customer' => $this->customer,
+        ]);
     }
 }
