@@ -2,6 +2,7 @@
     <section id="content"
         class="max-w-[640px] w-full min-h-screen mx-auto flex flex-col bg-[#F8F8F8] overflow-x-hidden pb-[122px] relative">
         <div class="mx-4 my-4">
+
             <!-- Halaman Utama -->
             <h2 class="text-lg font-bold">Daftar Pelanggan</h2>
             <div class="overflow-x-auto">

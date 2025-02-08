@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Config;
 use App\Http\Controllers\CustomerController;
 use App\Livewire\Front\Hitung;
 use App\Livewire\Front\ScanPage;
+use App\Livewire\Front\Index;
 use Illuminate\Support\Facades\Storage;
 
 Route::redirect('/', '/login');
@@ -20,9 +21,7 @@ Route::view('profile', 'profile')
 
 Route::get('/customers/generate-pdf', [CustomerController::class, 'generatePDF'])->name('customers.generate-pdf');
 
-Route::get('/index', function () {
-    return view('livewire.front.index');
-})->name('front.index');
+Route::get('/index', Index::class)->name('front.index');
 Route::get('/hitung/{customer}', Hitung::class)->name('front.hitung');
 Route::get('/scan', ScanPage::class)->name('front.scan');
 

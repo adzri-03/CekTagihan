@@ -28,7 +28,6 @@
     <script type="text/javascript">
         console.log('Livewire status:', typeof window.Livewire !== 'undefined' ? 'Loaded' : 'Not Loaded');
     </script>
-
 </body>
 
 </html>
