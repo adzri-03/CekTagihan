@@ -4,7 +4,6 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-
         <title>{{ config('app.name', 'Laravel') }}</title>
 
         <!-- Fonts -->
@@ -34,5 +33,8 @@
         </div>
 
         @livewireScripts
+        <script src="https://unpkg.com/html5-qrcode"></script>
+        <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+
     </body>
 </html>

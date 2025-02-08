@@ -40,22 +40,20 @@ Route::get('/download-pdf/{filename}', function ($filename) {
 
 
 Route::post('/process-scan', function (Request $request) {
-    $data = json_decode($request->scanned_code, true);
-
-    if (!$data || !isset($data['id'])) {
-        return response()->json(['success' => false, 'message' => 'Format QR tidak valid']);
-    }
-
-    $customer = Customer::find($data['id']);
+    
+    $customer = Customer::findOrFail($request->scanned_code);
 
     if ($customer) {
         return response()->json([
             'success' => true,
-            'redirect_url' => route('front.hitung', ['customer' => $customer->id]),
+            'redirect_url' => route('front.hitung', ['customer' => $customer]),
         ]);
     }
 
-    return response()->json(['success' => false, 'message' => 'Pelanggan tidak ditemukan']);
+    return response()->json([
+        'success' => false,
+        'message' => 'Pelanggan tidak ditemukan',
+    ]);
 })->name('front.process-scan');
 
 

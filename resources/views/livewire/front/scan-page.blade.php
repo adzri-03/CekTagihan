@@ -88,12 +88,17 @@
             </div>
         </div>
     </section>
+
+    <script src="https://unpkg.com/html5-qrcode"></script>
+
     <script type="text/javascript">
         let html5QrCode = null;
+
         let isScanning = false;
     
         function openModal() {
-            document.getElementById('scannerModal').classList.remove('hidden');
+            let modal = document.getElementById('scannerModal');
+            modal.classList.remove('hidden');
             startScanner();
         }
     
@@ -132,53 +137,29 @@
 
                 // Sisanya sama seperti kode Anda...
                 async function startScanner() {
-                    if (html5QrCode) {
-                        await html5QrCode.stop();
-                    }
+                    if (isScanning) return; // Mencegah scanner dipanggil dua kali
 
+                    isScanning = true;
                     html5QrCode = new Html5Qrcode("reader");
+
                     const config = {
                         fps: 10,
-                        qrbox: {
-                            width: 300,
-                            height: 300
-                        },
+                        qrbox: { width: 300, height: 300 },
                         showTorchButtonIfSupported: true,
                     };
 
                     try {
                         const devices = await Html5Qrcode.getCameras();
-                        if (devices && devices.length > 0) {
+                        if (devices.length > 0) {
                             const cameraId = devices.length > 1 ? devices[1].id : devices[0].id;
-                            await html5QrCode.start(cameraId, config,
-                                (decodedText) => {
-                                    console.log("QR Code detected:", decodedText);
-                                    window.$wire.dispatch('handleScanSuccess', decodedText);
-                                    html5QrCode.stop();
-                                    closeModal();
-                                },
-                                (errorMessage) => {
-                                    console.log("QR Error:", errorMessage);
-                                }
-                            );
+                            await html5QrCode.start(cameraId, config, processScan, handleScanError);
                         } else {
-                            console.error("No camera found!");
-                            document.getElementById('scan-error-message').classList.remove('hidden');
-                            document.getElementById('scan-error-message').innerText =
-                                'Tidak ada kamera yang ditemukan.';
+                            showError("Kamera tidak ditemukan.");
+                            isScanning = false;
                         }
                     } catch (err) {
-                        console.error('Error starting scanner:', err);
-                        let errorMessage = 'Terjadi kesalahan saat memulai scanner.';
-                        if (err.name === 'NotAllowedError') {
-                            errorMessage = 'Izin kamera ditolak. Mohon izinkan akses kamera dan coba lagi.';
-                        } else if (err.name === 'NotFoundError') {
-                            errorMessage = 'Kamera tidak ditemukan.';
-                        } else if (err.name === 'NotReadableError') {
-                            errorMessage = 'Kamera sedang digunakan oleh aplikasi lain.';
-                        }
-                        document.getElementById('scan-error-message').classList.remove('hidden');
-                        document.getElementById('scan-error-message').innerText = errorMessage;
+                        handleCameraError(err);
+                        isScanning = false;
                     }
                 }
 
@@ -204,7 +185,8 @@
         }
     
         function processScan(decodedText) {
-            console.log("QR Code scanned:", decodedText);
+            console.log("✅ QR Code scanned:", decodedText);
+            alert("QR Code scanned: " + decodedText);
             stopScanner();
             closeModal();
             sendScanResult(decodedText);
@@ -238,21 +220,10 @@
         let scanning = false;
 
         function sendScanResult(decodedText) {
-            if (scanning) return; // Mencegah multiple scan
+            if (scanning) return;
             scanning = true;
 
             console.log("🔍 QR Code scanned:", decodedText);
-
-            setTimeout(() => { // Delay untuk mencegah konflik dengan stopScanner
-                if (typeof stopScanner === "function") {
-                    try {
-                        stopScanner(); // Hentikan scanner jika berjalan
-                        console.log("✅ Scanner stopped successfully.");
-                    } catch (e) {
-                        console.warn("⚠️ Scanner stop error:", e);
-                    }
-                }
-            }, 500);
 
             fetch("{{ route('front.process-scan') }}", {
                 method: "POST",
@@ -260,23 +231,23 @@
                     "Content-Type": "application/json",
                     "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
                 },
-                body: JSON.stringify({ scanned_code: decodedText }) // Pastikan key sesuai dengan backend
+                body: JSON.stringify({ scanned_code: decodedText })
             })
             .then(response => response.json())
             .then(data => {
                 console.log("📡 Server response:", data);
                 if (data.success) {
-                    scanning = false; // Reset flag sebelum redirect
+                    scanning = false;
                     window.location.href = data.redirect_url;
                 } else {
                     showError(data.message || "Pelanggan tidak ditemukan.");
-                    scanning = false; // Reset flag jika gagal
+                    scanning = false;
                 }
             })
             .catch(error => {
                 console.error("❌ Fetch error:", error);
                 showError("Terjadi kesalahan saat menghubungi server.");
-                scanning = false; // Reset flag jika terjadi error
+                scanning = false;
             });
         }
     

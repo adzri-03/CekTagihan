@@ -7,11 +7,13 @@ use App\Models\Customer;
 
 class Hitung extends Component
 {
+    public $customerId;
     public $customer;
 
-    public function mount(Customer $customer)
+    public function mount($customer)
     {
-        $this->customer = $customer;
+        $this->customerId = $customer; 
+        $this->customer = Customer::find($customer);
     }
 
     public function render()
