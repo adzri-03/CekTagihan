@@ -15,10 +15,15 @@ class Customer extends Model
         'name',
         'address',
         'phone',
+        'golongan_id'
     ];
 
-    public function pembacaanMeters()
+    public function latestPembacaanMeters()
     {
-        return $this->hasMany(PembacaanMeter::class);
+        return $this->hasOne(PembacaanMeter::class)->latest();
+    }
+    public function golongan()
+    {
+        return $this->belongsTo(Golongan::class);
     }
 }

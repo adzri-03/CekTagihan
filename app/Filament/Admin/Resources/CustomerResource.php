@@ -93,17 +93,9 @@ class CustomerResource extends Resource
 
     public static function generateQrCode($record)
     {
-        $data = [
-            'id' => $record->id,
-            'pam_code' => $record->pam_code,
-            'name' => $record->name,
-            'address' => $record->address,
-            'phone' => $record->phone,
-        ];
-
         $img = QrCode::format('png')
             ->size(500)
-            ->generate(json_encode($data));
+            ->generate(json_encode($record->pam_code));
         $base64 = 'data:image/png;base64,' . base64_encode($img);
 
         Notification::make()

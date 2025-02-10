@@ -8,8 +8,6 @@ use App\Http\Controllers\API\CountMeterController;
 Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:10,1')->name('api.register');
 Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:10,1')->name('api.login');
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/hitung', [CountMeterController::class, 'store'])->name('api.hitung');
-    Route::get('/invoice/{customer_id}', [CountMeterController::class, 'invoice'])->name('api.invoice');
     Route::get('/user', function (Request $request) {
         return $request->user();
     });

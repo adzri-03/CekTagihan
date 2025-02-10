@@ -3,14 +3,14 @@
         class="max-w-[640px] w-full min-h-screen mx-auto flex flex-col bg-[#F8F8F8] overflow-x-hidden pb-[122px] relative">
         <div class="mx-4 my-4">
 
-     @if ($selectedCustomer)
-        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4">
-            <p class="font-bold">Data Pelanggan</p>
-            <p>Nama: {{ $selectedCustomer->name }}</p>
-            <p>Alamat: {{ $selectedCustomer->address }}</p>
-            <p>No. HP: {{ $selectedCustomer->phone }}</p>
-        </div>
-    @endif
+            @if ($selectedCustomer)
+                <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4">
+                    <p class="font-bold">Data Pelanggan</p>
+                    <p>Nama: {{ $selectedCustomer->name }}</p>
+                    <p>Alamat: {{ $selectedCustomer->address }}</p>
+                    <p>No. HP: {{ $selectedCustomer->phone }}</p>
+                </div>
+            @endif
             <!-- Halaman Utama -->
             <h2 class="text-lg font-bold">Daftar Pelanggan</h2>
             <div class="overflow-x-auto">
@@ -115,7 +115,10 @@
 
             const config = {
                 fps: 10,
-                qrbox: { width: 300, height: 300 },
+                qrbox: {
+                    width: 300,
+                    height: 300
+                },
                 showTorchButtonIfSupported: true,
             };
 
@@ -144,7 +147,10 @@
 
                     const config = {
                         fps: 10,
-                        qrbox: { width: 300, height: 300 },
+                        qrbox: {
+                            width: 300,
+                            height: 300
+                        },
                         showTorchButtonIfSupported: true,
                     };
 
@@ -180,7 +186,8 @@
                 });
             } catch (err) {
                 handleCameraError(err);
-                isScanning = false; (scan-page)
+                isScanning = false;
+                (scan - page)
             }
         }
 
@@ -223,32 +230,47 @@
             if (scanning) return;
             scanning = true;
 
-            console.log("🔍 QR Code scanned:", decodedText);
+            try {
+                // Parse the QR code content first (since it's already a JSON string)
+                const scannedData = JSON.parse(decodedText);
+                console.log("🔍 QR Code scanned:", scannedData);
 
-            fetch("{{ route('front.process-scan') }}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
-                },
-                body: JSON.stringify({ scanned_code: decodedText })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log("📡 Server response:", data);
-                if (data.success) {
-                    scanning = false;
-                    window.location.href = data.redirect_url;
-                } else {
-                    showError(data.message || "Pelanggan tidak ditemukan.");
-                    scanning = false;
-                }
-            })
-            .catch(error => {
-                console.error("❌ Fetch error:", error);
-                showError("Terjadi kesalahan saat menghubungi server.");
+                fetch("/process-scan", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+                        },
+                        body: JSON.stringify({
+                            scanned_code: decodedText
+                        })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log("📡 Server response:", data);
+                        if (data.success) {
+                            window.location.href = data.redirect_url;
+                        } else {
+                            showError(data.message || "Pelanggan tidak ditemukan.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("❌ Fetch error:", error);
+                        showError("Terjadi kesalahan saat menghubungi server.");
+                    })
+                    .finally(() => {
+                        scanning = false;
+                    });
+            } catch (error) {
+                console.error("❌ JSON Parse error:", error);
+                showError("Format QR Code tidak valid.");
                 scanning = false;
-            });
+            }
         }
 
         function showError(message) {
