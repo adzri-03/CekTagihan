@@ -68,10 +68,7 @@ class GeneratePdfJob implements ShouldQueue
         $qrCode = QrCode::format('png')
             ->size(self::QR_SIZE)
             ->generate(json_encode($customer->only([
-                'pam_code',
-                'name',
-                'address',
-                'phone'
+                'pam_code'
             ])));
 
         return [
@@ -113,7 +110,7 @@ class GeneratePdfJob implements ShouldQueue
 
     protected function notifyUser(string $filename): void
     {
-        $user = User::findOrFail($this->userId);
+        $user = User::find($this->userId);
 
         $notification = Notification::make()
             ->title('PDF siap diunduh')
@@ -131,7 +128,7 @@ class GeneratePdfJob implements ShouldQueue
 
         $notification->sendToDatabase($user);
 
-        $notification->broadcast(true);
+        $notification->broadcast($user);
 
         event(new DatabaseNotificationsSent($user));
     }

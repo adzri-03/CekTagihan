@@ -11,11 +11,6 @@ window.Echo = new Echo({
     forceTLS: true
 });
 
-const pusher = new Pusher("c92509f4a2d5966430c1", {
-    cluster: "ap1",
-    encrypted: true
-});
-
 window.Html5Qrcode = Html5Qrcode;
 
 

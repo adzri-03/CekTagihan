@@ -1137,6 +1137,7 @@
                 "issues": "https://github.com/filamentphp/filament/issues",
                 "source": "https://github.com/filamentphp/filament"
             },
+
             "time": "2025-02-10T08:14:18+00:00"
         },
         {
@@ -1202,6 +1203,7 @@
                 "issues": "https://github.com/filamentphp/filament/issues",
                 "source": "https://github.com/filamentphp/filament"
             },
+
             "time": "2025-02-10T10:37:22+00:00"
         },
         {
@@ -1258,6 +1260,7 @@
                 "issues": "https://github.com/filamentphp/filament/issues",
                 "source": "https://github.com/filamentphp/filament"
             },
+
             "time": "2025-02-10T10:37:19+00:00"
         },
         {
@@ -1309,6 +1312,7 @@
                 "issues": "https://github.com/filamentphp/filament/issues",
                 "source": "https://github.com/filamentphp/filament"
             },
+
             "time": "2025-02-10T08:14:18+00:00"
         },
         {
@@ -1361,6 +1365,7 @@
                 "issues": "https://github.com/filamentphp/filament/issues",
                 "source": "https://github.com/filamentphp/filament"
             },
+
             "time": "2025-02-10T08:14:22+00:00"
         },
         {
@@ -1420,6 +1425,7 @@
                 "issues": "https://github.com/filamentphp/filament/issues",
                 "source": "https://github.com/filamentphp/filament"
             },
+
             "time": "2025-02-10T08:14:57+00:00"
         },
         {
@@ -1472,6 +1478,7 @@
                 "issues": "https://github.com/filamentphp/filament/issues",
                 "source": "https://github.com/filamentphp/filament"
             },
+
             "time": "2025-02-10T08:14:59+00:00"
         },
         {
@@ -1517,6 +1524,7 @@
                 "source": "https://github.com/filamentphp/filament"
             },
             "time": "2025-02-10T10:37:39+00:00"
+
         },
         {
             "name": "flowframe/laravel-trend",
