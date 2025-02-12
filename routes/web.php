@@ -1,14 +1,19 @@
 <?php
 
-use App\Http\Controllers\API\CountMeterController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CustomerController;
-use App\Livewire\Front\Hitung;
-use App\Livewire\Front\ScanPage;
-use App\Livewire\Front\Index;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\Request;
 use App\Models\Customer;
+use Illuminate\Http\Request;
+use App\Livewire\Front\Index;
+use App\Livewire\Front\Hitung;
+use Filament\Facades\Filament;
+use App\Livewire\Front\History;
+use App\Livewire\Front\ScanPage;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Config;
+
+use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\API\CountMeterController;
+
 
 Route::redirect('/', '/login');
 
@@ -23,12 +28,15 @@ Route::middleware(['auth'])->group(function () {
     Route::view('profile', 'profile')
         ->name('profile');
 
-    Route::get('/index', Index::class)->name('front.index');
-    Route::get('/hitung/{customer}', Hitung::class)->name('front.hitung');
-    Route::get('/scan', ScanPage::class)->name('front.scan');
-    Route::get('/invoice/{pembacaanMeter}', [CountMeterController::class, 'invoice'])
-        ->name('api.invoice');
-    Route::post('/hitung', [CountMeterController::class, 'store'])->name('hitung');
+Route::get('/customers/generate-pdf', [CustomerController::class, 'generatePDF'])->name('customers.generate-pdf');
+
+Route::get('/index', Index::class)->name('front.index');
+Route::get('/hitung/{customer}', Hitung::class)->name('front.hitung');
+Route::get('/scan', ScanPage::class)->name('front.scan');
+Route::get('/invoice/{pembacaanMeter}', [CountMeterController::class, 'invoice'])
+    ->name('api.invoice');
+Route::post('/hitung', [CountMeterController::class, 'store'])->name('hitung');
+Route::get('/history', History::class)->name('front.history');
 
 
     Route::get('/download-pdf/{filename}', function ($filename) {
