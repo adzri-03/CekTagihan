@@ -18,6 +18,10 @@ class Customer extends Model
         'golongan_id'
     ];
 
+    public function pembacaanMeters()
+    {
+        return $this->hasMany(PembacaanMeter::class);
+    }
     public function latestPembacaanMeters()
     {
         return $this->hasOne(PembacaanMeter::class)->latest();

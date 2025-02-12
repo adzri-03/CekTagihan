@@ -1,4 +1,4 @@
-{{-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -149,8 +149,8 @@
         </div>
     </div>
 </body>
-</html> --}}
-<!DOCTYPE html>
+</html>
+{{-- <!DOCTYPE html>
 <html>
 
 <head>
@@ -201,11 +201,11 @@
     <table class="table">
         <tr>
             <td width="35%">Pelanggan</td>
-            <td>: {{ $data->customer->name }}</td>
+            <td>: {{ $data->name }}</td>
         </tr>
         <tr>
             <td>Kode PAM</td>
-            <td>: {{ $data->customer->pam_code }}</td>
+            <td>: {{ $data->pam_code }}</td>
         </tr>
         <tr>
             <td>Tanggal</td>
@@ -244,4 +244,4 @@
     </p>
 </body>
 
-</html>
+</html> --}}

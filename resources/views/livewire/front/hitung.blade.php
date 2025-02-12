@@ -46,7 +46,7 @@
                 <label class="block text-sm font-medium text-gray-700 mb-1">
                     Meter Awal
                 </label>
-                <input type="number" value="{{ $customer->latestPembacaanMeter?->meter_akhir ?? 0 }}"
+                <input type="number" value="{{ $customer->latestPembacaanMeters?->meter_akhir ?? 0 }}"
                     class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50" disabled>
             </div>
 

@@ -1,285 +1,251 @@
-<div>
-    <section id="content"
-        class="max-w-[640px] w-full min-h-screen mx-auto flex flex-col bg-[#F8F8F8] overflow-x-hidden pb-[122px] relative">
-        <div class="mx-4 my-4">
+<section id="content"
+    class="max-w-[640px] w-full min-h-screen mx-auto flex flex-col bg-[#F8F8F8] overflow-x-hidden pb-[122px] relative">
+    <div class="mx-4 my-4">
+        <!-- Main Content -->
+        <h2 class="text-lg font-bold">Daftar Pelanggan</h2>
 
-            @if ($selectedCustomer)
-                <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4">
-                    <p class="font-bold">Data Pelanggan</p>
-                    <p>Nama: {{ $selectedCustomer->name }}</p>
-                    <p>Alamat: {{ $selectedCustomer->address }}</p>
-                    <p>No. HP: {{ $selectedCustomer->phone }}</p>
-                </div>
-            @endif
-            <!-- Halaman Utama -->
-            <h2 class="text-lg font-bold">Daftar Pelanggan</h2>
-            <div class="overflow-x-auto">
-                <table class="w-full border border-collapse zebra">
-                    <thead>
+        <!-- Customer Table -->
+        <div class="overflow-x-auto">
+            <table class="w-full border border-collapse zebra">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Kode PAM</th>
+                        <th>Nama</th>
+                        <th>Alamat</th>
+                        <th>No. Handphone</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($customers as $index => $customer)
                         <tr>
-                            <th>No.</th>
-                            <th>Nama</th>
-                            <th>Alamat</th>
-                            <th>No. Handphone</th>
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $customer->pam_code }}</td>
+                            <td>{{ $customer->name }}</td>
+                            <td>{{ $customer->address }}</td>
+                            <td>{{ $customer->phone }}</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($customers as $customer)
-                            <tr>
-                                <td>{{ $customer->id }}</td>
-                                <td>{{ $customer->name }}</td>
-                                <td>{{ $customer->address }}</td>
-                                <td>{{ $customer->phone }}</td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="4">No customers found.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="text-center">Semua pelanggan telah discan bulan ini</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
 
-            <!-- Tombol untuk Scanner -->
-            <div class="fixed bottom-[24px] w-full flex justify-center items-center z-30">
-                <div
-                    class="p-3 bg-blue-500 hover:bg-blue-600 text-white rounded-full shadow-lg transition-all transform hover:scale-105">
-                    <button onclick="openModal()" class="w-[32px]" aria-label="Mulai Scanner">
-                        <img src="{{ asset('assets/icons/qr-code.png') }}" alt="">
-                    </button>
-                </div>
-            </div>
+        <!-- Pagination -->
+        <div class="mt-4">
+            {{ $customers->links() }}
+        </div>
 
-            <!-- Modal Scanner -->
-            <div id="scannerModal"
-                class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 z-50 flex items-end sm:items-center justify-center">
+        <!-- Scanner Button -->
+        <div class="fixed bottom-[24px] w-full flex justify-center items-center z-30">
+            <button onclick="QRScanner.openModal()"
+                class="p-3 bg-blue-500 hover:bg-blue-600 text-white rounded-full shadow-lg transition-all transform hover:scale-105"
+                aria-label="Mulai Scanner">
+                <img src="{{ asset('assets/icons/qr-code.png') }}" alt="QR Scanner" class="w-[32px]">
+            </button>
+        </div>
+
+        <!-- Scanner Modal -->
+        <div id="scannerModal"
+            class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 z-50 items-end sm:items-center justify-center">
+            <div class="modal-content relative w-full sm:w-[500px] bg-white rounded-t-lg sm:rounded-lg shadow-xl">
+                <!-- Close Button -->
+                <button onclick="QRScanner.closeModal()"
+                    class="absolute top-4 right-4 text-gray-600 hover:text-gray-800">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                        stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+
                 <!-- Modal Content -->
-                <div
-                    class="relative w-full sm:w-[500px] bg-white rounded-t-lg sm:rounded-lg shadow-xl transition-transform transform">
-                    <!-- Close Button -->
-                    <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-600 hover:text-gray-800">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                            stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-
-                    <!-- Modal Body -->
-                    <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                        <div class="text-center">
-                            <h3 class="text-lg font-bold text-gray-900">Scan QR Code</h3>
-                            <div class="mt-4 flex justify-center">
-                                <!-- Scanner Reader -->
-                                <div id="reader"
-                                    class="w-full max-w-[350px] h-[350px] border border-gray-300 rounded-md"></div>
-                            </div>
-                            <p id="scan-error-message" class="text-red-500 text-sm mt-2 hidden">Error Message</p>
+                <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="text-center">
+                        <h3 class="text-lg font-bold text-gray-900">Scan QR Code</h3>
+                        <div class="mt-4 flex justify-center">
+                            <div id="reader"
+                                class="w-full max-w-[350px] h-[350px] border border-gray-300 rounded-md"></div>
                         </div>
+                        <div id="scanner-loading"
+                            class="absolute inset-0 bg-white/80 flex items-center justify-center hidden">
+                            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                        </div>
+                        <div id="scan-success-feedback"
+                            class="absolute inset-0 bg-green-500/50 flex items-center justify-center hidden">
+                            <svg class="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                        <p id="scan-error-message" class="text-red-500 text-sm mt-2 hidden"></p>
                     </div>
+                </div>
 
-                    <!-- Modal Footer -->
-                    <div class="bg-gray-50 px-4 py-3 flex justify-between items-center">
-                        <button onclick="closeModal()" type="button"
-                            class="inline-flex justify-center rounded-md bg-red-500 text-white px-3 py-2 text-sm font-semibold hover:bg-red-600">
-                            Cancel
-                        </button>
-                    </div>
+                <!-- Modal Footer -->
+                <div class="bg-gray-50 px-4 py-3 flex justify-between items-center">
+                    <button onclick="QRScanner.closeModal()"
+                        class="inline-flex justify-center rounded-md bg-red-500 text-white px-3 py-2 text-sm font-semibold hover:bg-red-600">
+                        Cancel
+                    </button>
+                    <button onclick="QRScanner.retryScanner()"
+                        class="inline-flex justify-center rounded-md bg-blue-500 text-white px-3 py-2 text-sm font-semibold hover:bg-blue-600">
+                        Coba Lagi
+                    </button>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
+<script src="https://unpkg.com/html5-qrcode"></script>
+<script>
+    const QRScanner = (() => {
 
-    <script src="https://unpkg.com/html5-qrcode"></script>
+        // State
+        let scanner = null;
+        let isProcessing = false;
 
-    <script type="text/javascript">
-        let html5QrCode = null;
+        // DOM Elements
+        const elements = {
+            modal: document.getElementById('scannerModal'),
+            reader: document.getElementById('reader'),
+            loading: document.getElementById('scanner-loading'),
+            error: document.getElementById('scan-error-message'),
+            success: document.getElementById('scan-success-feedback'),
+        };
 
-        let isScanning = false;
+        // UI Methods
+        const showLoading = () => elements.loading.classList.remove('hidden');
+        const hideLoading = () => elements.loading.classList.add('hidden');
+        const showError = (message) => {
+            elements.error.textContent = message;
+            elements.error.classList.remove('hidden');
+        };
+        const hideError = () => elements.error.classList.add('hidden');
+        const showSuccess = () => elements.success.classList.remove('hidden');
+        const hideSuccess = () => elements.success.classList.add('hidden');
 
-        function openModal() {
-            let modal = document.getElementById('scannerModal');
-            modal.classList.remove('hidden');
-            startScanner();
-        }
-
-        function closeModal() {
-            document.getElementById('scannerModal').classList.add('hidden');
-            stopScanner();
-        }
-
-        async function startScanner() {
-            if (isScanning) return; // Mencegah scanner dipanggil dua kali
-
-            isScanning = true;
-            html5QrCode = new Html5Qrcode("reader");
-
-            const config = {
-                fps: 10,
-                qrbox: {
-                    width: 300,
-                    height: 300
-                },
-                showTorchButtonIfSupported: true,
-            };
-
+        const initScanner = async () => {
             try {
-                const devices = await Html5Qrcode.getCameras();
-                if (devices.length > 0) {
-                    const cameraId = devices.length > 1 ? devices[1].id : devices[0].id;
-                    await html5QrCode.start(cameraId, config, processScan, handleScanError);
-                } else {
-                    showError("Kamera tidak ditemukan.");
-                    isScanning = false;
-                }
+                showLoading();
+                hideError();
 
-                window.closeModal = function() {
-                    const modal = document.getElementById('scannerModal')
-                    modal.classList.add('hidden')
-                    stopScanner()
-                }
+                await destroyScanner();
 
-                // Sisanya sama seperti kode Anda...
-                async function startScanner() {
-                    if (isScanning) return; // Mencegah scanner dipanggil dua kali
+                const cameras = await Html5Qrcode.getCameras();
+                if (!cameras.length) throw new Error('Kamera tidak ditemukan');
+                const hasBackCamera = cameras.some(cam => cam.label.toLowerCase().includes('back'))
 
-                    isScanning = true;
-                    html5QrCode = new Html5Qrcode("reader");
+                const cameraId = hasBackCamera ?
+                    cameras.find(cam => cam.label.toLowerCase().includes('back')).id :
+                    cameras[0]?.id
 
-                    const config = {
-                        fps: 10,
-                        qrbox: {
-                            width: 300,
-                            height: 300
-                        },
-                        showTorchButtonIfSupported: true,
-                    };
+                if (!cameraId) throw new Error('Kamera tidak ditemukan 2');
 
-                    try {
-                        const devices = await Html5Qrcode.getCameras();
-                        if (devices.length > 0) {
-                            const cameraId = devices.length > 1 ? devices[1].id : devices[0].id;
-                            await html5QrCode.start(cameraId, config, processScan, handleScanError);
-                        } else {
-                            showError("Kamera tidak ditemukan.");
-                            isScanning = false;
-                        }
-                    } catch (err) {
-                        handleCameraError(err);
-                        isScanning = false;
-                    }
-                }
-
-                async function stopScanner() {
-                    if (html5QrCode) {
-                        try {
-                            await html5QrCode.stop();
-                            html5QrCode = null;
-                        } catch (err) {
-                            console.error('Error stopping scanner:', err);
-                        }
-                    }
-                }
-
-                // Tambahkan event listener untuk cleanup
-                window.addEventListener('beforeunload', () => {
-                    stopScanner();
+                scanner = new Html5Qrcode('reader', {
+                    verbose: false,
+                    useBarCodeDetectorIfSupported: false
                 });
-            } catch (err) {
-                handleCameraError(err);
-                isScanning = false;
-                (scan - page)
+                await scanner.start(
+                    cameraId, {
+                        fps: 10,
+                        qrbox: 250,
+                        experimentalFeatures: {
+                            useBarCodeDetectorIfSupported: false
+                        },
+                        supportedScanFormats: [Html5Qrcode.SCAN_TYPE_QR_CODE]
+                    },
+                    handleScanSuccess,
+                    handleScanError
+                );
+                console.log('Scanner started successfully');
+            } catch (error) {
+                handleError(error);
+            } finally {
+                hideLoading();
             }
-        }
+        };
 
-        function processScan(decodedText) {
-            console.log("✅ QR Code scanned:", decodedText);
-            alert("QR Code scanned: " + decodedText);
-            stopScanner();
-            closeModal();
-            sendScanResult(decodedText);
-        }
-
-        function handleScanError(errorMessage) {
-            console.log("QR Error:", errorMessage);
-        }
-
-        function handleCameraError(err) {
-            let message = "Terjadi kesalahan saat mengakses kamera.";
-            if (err.name === 'NotAllowedError') message = "Akses kamera ditolak. Mohon izinkan akses.";
-            if (err.name === 'NotFoundError') message = "Kamera tidak ditemukan.";
-            if (err.name === 'NotReadableError') message = "Kamera sedang digunakan oleh aplikasi lain.";
-            showError(message);
-            isScanning = false;
-        }
-
-        async function stopScanner() {
-            if (html5QrCode && isScanning) {
+        const destroyScanner = async () => {
+            if (scanner) {
                 try {
-                    await html5QrCode.stop();
-                    html5QrCode = null;
-                    isScanning = false;
-                } catch (err) {
-                    console.error("Error stopping scanner:", err);
+                    await scanner.stop();
+                    await scanner.clear();
+                    scanner = null;
+                } catch (error) {
+                    console.error('Error stopping scanner:', error);
                 }
             }
+        };
+
+        const retryScanner = async () => {
+            console.log('retried');
+            hideError();
+            await destroyScanner();
+            await initScanner();
         }
 
-        let scanning = false;
+        // Event Handlers
+        const handleScanSuccess = (decodedText) => {
+            if (isProcessing) return;
+            isProcessing = true;
 
-        function sendScanResult(decodedText) {
-            if (scanning) return;
-            scanning = true;
+            showSuccess();
+            window.Livewire.dispatch('scan-success', {scanned: decodedText});
 
-            try {
-                // Parse the QR code content first (since it's already a JSON string)
-                const scannedData = JSON.parse(decodedText);
-                console.log("🔍 QR Code scanned:", scannedData);
+            setTimeout(() => {
+                hideSuccess();
+                isProcessing = false;
+            }, 1500);
+        };
 
-                fetch("/process-scan", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
-                        },
-                        body: JSON.stringify({
-                            scanned_code: decodedText
-                        })
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log("📡 Server response:", data);
-                        if (data.success) {
-                            window.location.href = data.redirect_url;
-                        } else {
-                            showError(data.message || "Pelanggan tidak ditemukan.");
-                        }
-                    })
-                    .catch(error => {
-                        console.error("❌ Fetch error:", error);
-                        showError("Terjadi kesalahan saat menghubungi server.");
-                    })
-                    .finally(() => {
-                        scanning = false;
-                    });
-            } catch (error) {
-                console.error("❌ JSON Parse error:", error);
-                showError("Format QR Code tidak valid.");
-                scanning = false;
-            }
-        }
+        const handleScanError = (error) => {
+            if (error.includes('No QR code found')) return;
+            showError(error);
+        };
 
-        function showError(message) {
-            const errorElement = document.getElementById("scan-error-message");
-            errorElement.textContent = message;
-            errorElement.classList.remove("hidden");
-        }
+        const handleError = (error) => {
+            const errorMessages = {
+                'NotAllowedError': 'Izin kamera ditolak. Silakan izinkan akses kamera dan coba lagi.',
+                'NotFoundError': 'Kamera tidak ditemukan. Pastikan perangkat Anda memiliki kamera.',
+                'NotReadableError': 'Kamera sedang digunakan aplikasi lain. Tutup aplikasi lain yang menggunakan kamera.',
+                'OverconstrainedError': 'Tidak dapat mengakses kamera yang dipilih.',
+                'SecurityError': 'Akses kamera diblokir oleh kebijakan keamanan.',
+                'AbortError': 'Akses kamera dibatalkan.'
+            };
+            showError(errorMessages[error.name] || 'Terjadi kesalahan saat mengakses kamera');
+        };
 
-        window.addEventListener('beforeunload', stopScanner);
-    </script>
+        // Public Methods
+        const openModal = () => {
+            elements.modal.classList.remove('hidden');
+            elements.modal.classList.add('flex');
+            initScanner();
+        };
 
-</div>
+        const closeModal = () => {
+            elements.modal.classList.add('hidden');
+            elements.modal.classList.remove('flex');
+            destroyScanner();
+            hideError();
+        };
+
+        // Event Listeners
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        elements.modal.addEventListener('click', (e) => {
+            if (e.target === elements.modal) closeModal();
+        });
+
+        // Public API
+        return {
+            openModal,
+            closeModal,
+            retryScanner,
+        };
+    })();
+</script>

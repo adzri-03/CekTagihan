@@ -12,15 +12,26 @@ class Hitung extends Component
 {
     public $customerId, $customer, $meterAkhir, $errorMessage, $successMessage;
     public $penggunaan = 0, $estimasiBiaya = 0, $hargaPerM3 = 1500;
-    public $isLoading = false, $invoiceUrl = null, $showInvoice = false;
+    public $isLoading = false, $invoiceUrl = null, $showInvoice = false, $existingScan = false;
 
     const MAX_METER = 100000;
 
     public function mount($customer)
     {
-        $this->customerId = $customer;
-        $this->customer = Customer::with(['latestPembacaanMeters', 'golongan'])
-            ->findOrFail($customer);
+        $this->customer = Customer::with([
+            'latestPembacaanMeters' => function ($query) {
+            $query->select('customer_id', 'meter_akhir');
+            },
+            'golongan' => function ($query) {
+            $query->select('id', 'harga');
+            }
+        ])->findOrFail($customer);
+        $this->customerId = $this->customer->id;
+
+        $this->existingScan = PembacaanMeter::where('customer_id', $this->customerId)
+            ->whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->exists();
 
         $this->hargaPerM3 = $this->customer->golongan->harga ?? 1500;
     }
@@ -66,17 +77,20 @@ class Hitung extends Component
         $this->successMessage = null;
 
         try {
-            $data = PembacaanMeter::create([
-                'customer_id' => $this->customerId,
-                'meter_awal' => $this->customer->latestPembacaanMeters?->meter_akhir ?? 0,
-                'meter_akhir' => $this->meterAkhir,
-                'pemakaian' => $this->penggunaan,
-                'total' => $this->estimasiBiaya,
-            ]);
+            if (!$this->existingScan) {
+                $data = PembacaanMeter::create([
+                    'customer_id' => $this->customerId,
+                    'meter_awal' => $this->customer->latestPembacaanMeters?->meter_akhir ?? 0,
+                    'meter_akhir' => $this->meterAkhir,
+                    'pemakaian' => $this->penggunaan,
+                    'total' => $this->estimasiBiaya,
+                ]);
+            } else {
+                return $this->errorMessage = 'Customer ini sudah discan untuk bulan ini';
+            }
 
-            $this->invoiceUrl = route('api.invoice', $data->json('data.id'));
+            $this->invoiceUrl = route('api.invoice', $data->id);
             $this->showInvoice = true;
-            Log::debug('API Response: ', $data->json());
         } catch (\Exception $e) {
             $this->errorMessage = $e->getMessage();
         }
@@ -86,7 +100,7 @@ class Hitung extends Component
     {
         $this->reset(['showInvoice', 'invoiceUrl', 'meterAkhir']);
         $this->successMessage = 'Pembacaan meter berhasil disimpan';
-        return $this->redirect('/scan-page', navigate: true);
+        return $this->redirect('/scan', navigate: true);
     }
 
     public function render()

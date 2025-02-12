@@ -3,34 +3,62 @@
 namespace App\Livewire\Front;
 
 use App\Models\Customer;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class ScanPage extends Component
 {
-    public $customer;
+    use WithPagination;
 
-    protected $listeners = ['handleScanSuccess'];
+    protected $listeners = ['scan-success' => 'processScan'];
 
-    public function handleScanSuccess($decodedText)
+    public function processScan($scanned)
     {
-        info('QR Code scanned: ' . $decodedText); // Debug log
+        try {
+            Log::info($scanned);
+            $data = $this->validateQrData($scanned);
+            $customer = $this->findValidCustomer($data['pam_code']);
 
-        $customer = Customer::find($decodedText);
+            if ($customer) {
+                return redirect()->route('front.hitung', $customer);
+            }
 
-        if ($customer) {
-            session()->flash('message', 'Pelanggan ditemukan: ' . $customer->name);
-            $this->dispatchBrowserEvent('qr-scanned-success', ['url' => route('front.hitung', ['customerId' => $customer->id])]);
-        } else {
-            session()->flash('error', 'Pelanggan tidak ditemukan!');
-            $this->dispatchBrowserEvent('qr-scanned-fail', ['message' => 'Pelanggan tidak ditemukan!']);
+            session()->flash('error', 'Pelanggan tidak valid!');
+        } catch (\Exception $e) {
+            Log::error('Scan error: ' . $e->getMessage());
+            $this->dispatch('scan-error', message: $e->getMessage());
         }
+    }
+
+    protected function validateQrData($qrData)
+    {
+        $data = json_decode($qrData, true, 512, JSON_THROW_ON_ERROR);Log::info($data);
+        if (!isset($data['pam_code'])) {
+            throw new \Exception('Format QR tidak valid!');
+        }
+
+        return $data;
+    }
+
+    protected function findValidCustomer(int $pam_code): ?Customer
+    {
+        return Customer::where('pam_code', $pam_code)->first();
     }
 
     public function render()
     {
+        $currentMonth = now()->format('Y-m');
+
+        $customers = Customer::query()
+            ->whereDoesntHave('pembacaanMeters', function ($query) use ($currentMonth) {
+                $query->where('created_at', 'like', "{$currentMonth}%");
+            })
+            ->orderBy('name')
+            ->paginate(10);
+
         return view('livewire.front.scan-page', [
-            'customers' => Customer::all(), 
-            'selectedCustomer' => $this->customer
+            'customers' => $customers,
         ]);
     }
 }
