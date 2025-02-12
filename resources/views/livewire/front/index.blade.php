@@ -142,6 +142,17 @@
                                 Hitung
                             </p>
                         </a>
+                        <a href="{{ route('front.history') }}"
+                           class="group relative flex flex-col items-center gap-3 p-4 rounded-xl transition-all duration-200 hover:bg-gray-50"
+                           wire:navigate>
+                            <div class="w-[45px] h-[45px] flex shrink-0 group-hover:scale-110 transition-transform duration-200">
+                                <img src="{{ asset('assets/icons/history.png') }}"
+                                     class="object-cover filter group-hover:brightness-110" alt="icon">
+                            </div>
+                            <p class="font-medium text-sm text-[#505780] leading-[21px] group-hover:text-[#2C499B] transition-colors duration-200">
+                                Riwayat
+                            </p>
+                        </a>
                     </div>
                 </div>
 

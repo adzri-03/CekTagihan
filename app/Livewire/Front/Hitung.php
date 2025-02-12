@@ -74,9 +74,9 @@ class Hitung extends Component
                 'total' => $this->estimasiBiaya,
             ]);
 
-            $this->invoiceUrl = route('api.invoice', $data->json('data.id'));
+            $this->invoiceUrl = route('api.invoice', $data->id);
             $this->showInvoice = true;
-            Log::debug('API Response: ', $data->json());
+            Log::debug('API Response: ', $data->toArray());
         } catch (\Exception $e) {
             $this->errorMessage = $e->getMessage();
         }
