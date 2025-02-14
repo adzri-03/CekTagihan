@@ -90,6 +90,7 @@ class Hitung extends Component
             }
 
             $this->invoiceUrl = route('api.invoice', $data->id);
+            $this->invoiceUrl = route('api.invoice', $data->id);
             $this->showInvoice = true;
         } catch (\Exception $e) {
             $this->errorMessage = $e->getMessage();

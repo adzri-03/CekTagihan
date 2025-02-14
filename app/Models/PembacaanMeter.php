@@ -16,6 +16,7 @@ class PembacaanMeter extends Model
         'meter_akhir',
         'pemakaian',
         'total',
+        'created_at'
     ];
 
     public function customer() {

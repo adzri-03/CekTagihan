@@ -2,26 +2,30 @@
 
 namespace App\Livewire\Front;
 
+use Carbon\Carbon;
 use Livewire\Component;
+use App\Models\RiwayatPetugas;
 use App\Livewire\Actions\Logout;
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
 
 class Index extends Component
 {
     public $notifications = [];
     public $recentActivities = [];
+    public $riwayat = [];
     public $notificationCount = 0;
 
     protected $listeners = [
         'refreshNotifications' => 'loadNotifications',
-        'refreshActivities' => 'loadRecentActivities'
+        'refreshActivities' => 'loadRecentActivities',
+        'refreshRiwayat' => 'loadRiwayat',
     ];
 
     public function mount()
     {
         $this->loadNotifications();
         $this->loadRecentActivities();
+        $this->loadRiwayat();
     }
 
     public function loadNotifications()
@@ -55,6 +59,17 @@ class Index extends Component
             ],
             // Add more activities as needed
         ];
+    }
+
+    public function loadRiwayat()
+    {
+        // Ambil data riwayat berdasarkan user yang login
+        if (Auth::check()) {
+            $this->riwayat = RiwayatPetugas::where('user_id', Auth::id())
+                ->latest()
+                ->take(5)
+                ->get();
+        }
     }
 
     public function markNotificationAsRead($notificationId)
@@ -114,7 +129,8 @@ class Index extends Component
         return view('livewire.front.index', [
             'greeting' => $this->getGreeting(),
             'currentDate' => Carbon::now()->isoFormat('dddd, D MMMM Y'),
-            'userName' => Auth::check() ? Auth::user()->name : 'Tamu'
+            'userName' => Auth::check() ? Auth::user()->name : 'Tamu',
+            'riwayat' => $this->riwayat
         ]);
     }
 }

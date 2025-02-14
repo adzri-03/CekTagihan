@@ -1093,9 +1093,12 @@
                 "type": "git",
                 "url": "https://github.com/filamentphp/actions.git",
                 "reference": "cc8a0705a497508f499df29257cb3e0619a5ea04"
+                "reference": "cc8a0705a497508f499df29257cb3e0619a5ea04"
             },
             "dist": {
                 "type": "zip",
+                "url": "https://api.github.com/repos/filamentphp/actions/zipball/cc8a0705a497508f499df29257cb3e0619a5ea04",
+                "reference": "cc8a0705a497508f499df29257cb3e0619a5ea04",
                 "url": "https://api.github.com/repos/filamentphp/actions/zipball/cc8a0705a497508f499df29257cb3e0619a5ea04",
                 "reference": "cc8a0705a497508f499df29257cb3e0619a5ea04",
                 "shasum": ""
@@ -1211,9 +1214,12 @@
                 "type": "git",
                 "url": "https://github.com/filamentphp/forms.git",
                 "reference": "de69a442a458160aa29d382b952d8f1c0b641a32"
+                "reference": "de69a442a458160aa29d382b952d8f1c0b641a32"
             },
             "dist": {
                 "type": "zip",
+                "url": "https://api.github.com/repos/filamentphp/forms/zipball/de69a442a458160aa29d382b952d8f1c0b641a32",
+                "reference": "de69a442a458160aa29d382b952d8f1c0b641a32",
                 "url": "https://api.github.com/repos/filamentphp/forms/zipball/de69a442a458160aa29d382b952d8f1c0b641a32",
                 "reference": "de69a442a458160aa29d382b952d8f1c0b641a32",
                 "shasum": ""
@@ -1267,9 +1273,12 @@
                 "type": "git",
                 "url": "https://github.com/filamentphp/infolists.git",
                 "reference": "f6807434251196bed526540646da53efb6241ddc"
+                "reference": "f6807434251196bed526540646da53efb6241ddc"
             },
             "dist": {
                 "type": "zip",
+                "url": "https://api.github.com/repos/filamentphp/infolists/zipball/f6807434251196bed526540646da53efb6241ddc",
+                "reference": "f6807434251196bed526540646da53efb6241ddc",
                 "url": "https://api.github.com/repos/filamentphp/infolists/zipball/f6807434251196bed526540646da53efb6241ddc",
                 "reference": "f6807434251196bed526540646da53efb6241ddc",
                 "shasum": ""
@@ -1318,9 +1327,12 @@
                 "type": "git",
                 "url": "https://github.com/filamentphp/notifications.git",
                 "reference": "1b5c8cf1e8cf2022e437637d7cceb4ad378982a4"
+                "reference": "1b5c8cf1e8cf2022e437637d7cceb4ad378982a4"
             },
             "dist": {
                 "type": "zip",
+                "url": "https://api.github.com/repos/filamentphp/notifications/zipball/1b5c8cf1e8cf2022e437637d7cceb4ad378982a4",
+                "reference": "1b5c8cf1e8cf2022e437637d7cceb4ad378982a4",
                 "url": "https://api.github.com/repos/filamentphp/notifications/zipball/1b5c8cf1e8cf2022e437637d7cceb4ad378982a4",
                 "reference": "1b5c8cf1e8cf2022e437637d7cceb4ad378982a4",
                 "shasum": ""
@@ -1370,9 +1382,12 @@
                 "type": "git",
                 "url": "https://github.com/filamentphp/support.git",
                 "reference": "95223f4bbfaa8c817efeacb4e2e7ca6928297610"
+                "reference": "95223f4bbfaa8c817efeacb4e2e7ca6928297610"
             },
             "dist": {
                 "type": "zip",
+                "url": "https://api.github.com/repos/filamentphp/support/zipball/95223f4bbfaa8c817efeacb4e2e7ca6928297610",
+                "reference": "95223f4bbfaa8c817efeacb4e2e7ca6928297610",
                 "url": "https://api.github.com/repos/filamentphp/support/zipball/95223f4bbfaa8c817efeacb4e2e7ca6928297610",
                 "reference": "95223f4bbfaa8c817efeacb4e2e7ca6928297610",
                 "shasum": ""
@@ -1385,6 +1400,7 @@
                 "illuminate/support": "^10.45|^11.0",
                 "illuminate/view": "^10.45|^11.0",
                 "kirschbaum-development/eloquent-power-joins": "^3.0|^4.0",
+                "livewire/livewire": "^3.5",
                 "livewire/livewire": "^3.5",
                 "php": "^8.1",
                 "ryangjchandler/blade-capture-directive": "^0.2|^0.3|^1.0",
@@ -1429,9 +1445,12 @@
                 "type": "git",
                 "url": "https://github.com/filamentphp/tables.git",
                 "reference": "c1bf374b1c3286c2b70c3898c269b89cc966d560"
+                "reference": "c1bf374b1c3286c2b70c3898c269b89cc966d560"
             },
             "dist": {
                 "type": "zip",
+                "url": "https://api.github.com/repos/filamentphp/tables/zipball/c1bf374b1c3286c2b70c3898c269b89cc966d560",
+                "reference": "c1bf374b1c3286c2b70c3898c269b89cc966d560",
                 "url": "https://api.github.com/repos/filamentphp/tables/zipball/c1bf374b1c3286c2b70c3898c269b89cc966d560",
                 "reference": "c1bf374b1c3286c2b70c3898c269b89cc966d560",
                 "shasum": ""
@@ -1481,9 +1500,12 @@
                 "type": "git",
                 "url": "https://github.com/filamentphp/widgets.git",
                 "reference": "c0d29d9822c56ca37af6b04edb2fc51b02002fee"
+                "reference": "c0d29d9822c56ca37af6b04edb2fc51b02002fee"
             },
             "dist": {
                 "type": "zip",
+                "url": "https://api.github.com/repos/filamentphp/widgets/zipball/c0d29d9822c56ca37af6b04edb2fc51b02002fee",
+                "reference": "c0d29d9822c56ca37af6b04edb2fc51b02002fee",
                 "url": "https://api.github.com/repos/filamentphp/widgets/zipball/c0d29d9822c56ca37af6b04edb2fc51b02002fee",
                 "reference": "c0d29d9822c56ca37af6b04edb2fc51b02002fee",
                 "shasum": ""
@@ -5608,13 +5630,17 @@
         {
             "name": "spatie/color",
             "version": "1.8.0",
+            "version": "1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/color.git",
                 "reference": "142af7fec069a420babea80a5412eb2f646dcd8c"
+                "reference": "142af7fec069a420babea80a5412eb2f646dcd8c"
             },
             "dist": {
                 "type": "zip",
+                "url": "https://api.github.com/repos/spatie/color/zipball/142af7fec069a420babea80a5412eb2f646dcd8c",
+                "reference": "142af7fec069a420babea80a5412eb2f646dcd8c",
                 "url": "https://api.github.com/repos/spatie/color/zipball/142af7fec069a420babea80a5412eb2f646dcd8c",
                 "reference": "142af7fec069a420babea80a5412eb2f646dcd8c",
                 "shasum": ""
@@ -5655,6 +5681,7 @@
             "support": {
                 "issues": "https://github.com/spatie/color/issues",
                 "source": "https://github.com/spatie/color/tree/1.8.0"
+                "source": "https://github.com/spatie/color/tree/1.8.0"
             },
             "funding": [
                 {
@@ -5662,6 +5689,7 @@
                     "type": "github"
                 }
             ],
+            "time": "2025-02-10T09:22:41+00:00"
             "time": "2025-02-10T09:22:41+00:00"
         },
         {
