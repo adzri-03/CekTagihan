@@ -28,16 +28,13 @@ Route::middleware(['auth'])->group(function () {
     Route::view('profile', 'profile')
         ->name('profile');
 
-Route::get('/customers/generate-pdf', [CustomerController::class, 'generatePDF'])->name('customers.generate-pdf');
-
-Route::get('/index', Index::class)->name('front.index');
-Route::get('/hitung/{customer}', Hitung::class)->name('front.hitung');
-Route::get('/scan', ScanPage::class)->name('front.scan');
-Route::get('/invoice/{pembacaanMeter}', [CountMeterController::class, 'invoice'])
-    ->name('api.invoice');
-Route::post('/hitung', [CountMeterController::class, 'store'])->name('hitung');
-Route::get('/history', History::class)->name('front.history');
-
+    Route::get('/index', Index::class)->name('front.index');
+    Route::get('/hitung/{customer}', Hitung::class)->name('front.hitung');
+    Route::get('/scan', ScanPage::class)->name('front.scan');
+    Route::get('/invoice/{pembacaanMeter}', [CountMeterController::class, 'invoice'])
+        ->name('api.invoice');
+    Route::post('/hitung', [CountMeterController::class, 'store'])->name('hitung');
+    Route::get('/history', History::class)->name('front.history');
 
     Route::get('/download-pdf/{filename}', function ($filename) {
         return Storage::disk('public')->download($filename);
