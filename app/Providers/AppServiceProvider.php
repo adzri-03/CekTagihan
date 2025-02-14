@@ -5,6 +5,9 @@ namespace App\Providers;
 use App\Models\PembacaanMeter;
 use Illuminate\Support\ServiceProvider;
 use App\Observers\PembacaanMeterObserver;
+use App\Models\User;
+use Illuminate\Auth\Access\Response;
+use Illuminate\Support\Facades\Gate;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +16,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(\Barryvdh\DomPDF\ServiceProvider::class);
+
     }
 
     /**
@@ -22,5 +25,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         PembacaanMeter::observe(PembacaanMeterObserver::class);
+        Gate::define('admin', function (User $user) {
+            return $user->role === 'admin' ? Response::allow() : Response::deny('Hanya admin yg bisa mengakses halaman ini');
+        });
     }
 }

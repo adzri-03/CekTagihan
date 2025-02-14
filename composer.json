@@ -18,7 +18,8 @@
         "livewire/volt": "^1.0",
         "mpdf/mpdf": "^8.2",
         "pusher/pusher-php-server": "^7.2",
-        "simplesoftwareio/simple-qrcode": "^4.2"
+        "simplesoftwareio/simple-qrcode": "^4.2",
+        "spatie/laravel-permission": "^6.14"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

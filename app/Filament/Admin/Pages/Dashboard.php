@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Pages;
+namespace App\Filament\Pages\Admin;
 
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Section;
@@ -13,7 +13,7 @@ class Dashboard extends \Filament\Pages\Dashboard
 {
     use BaseDashboard\Concerns\HasFiltersForm;
 
-    public function filtersForm(Form $form): Form //TODO buat fitur lihat show notifikasi
+    public function filtersForm(Form $form): Form
     {
         return $form
             ->schema([
