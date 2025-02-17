@@ -6,9 +6,14 @@ use Livewire\Component;
 
 class MenuBar extends Component
 {
-    public $activeMenu = 'home';
+    public $activeMenu = ['index', 'scan'];
 
     public $menus = [
+        [
+            'name' => 'Index',
+            'icon' => 'home.png',
+            'route' => 'front.index',
+        ],
         [
             'name' => 'Hitung',
             'icon' => 'scan.png',

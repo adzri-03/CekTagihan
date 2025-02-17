@@ -4,7 +4,7 @@
         @foreach ($menus as $menu)
             <a href="{{ route($menu['route']) }}" wire:click="setActiveMenu('{{ $menu['route'] }}')">
                 <div class="flex flex-col gap-1 items-center {{ $activeMenu == $menu['route'] ? 'text-[#4041DA]' : 'text-[#A0A3BD]' }}">
-                    <div class="w-6 h-6 flex shrink-0">
+                    <div class="w-8 h-8 flex shrink-0">
                         <img src="{{ asset('assets/icons/' . $menu['icon']) }}" alt="icon">
                     </div>
                     <p class="{{ $activeMenu == $menu['route'] ? 'text-[#4041DA]' : 'text-[#A0A3BD]' }} text-xs leading-[18px] font-semibold">{{ $menu['name'] }}</p>

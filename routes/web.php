@@ -9,7 +9,6 @@ use App\Livewire\Front\History;
 use App\Livewire\Front\ScanPage;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Config;
-
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\API\CountMeterController;

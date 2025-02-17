@@ -12,8 +12,6 @@ class History extends Component
 
     public function mount($customerId = null)
     {
-        
-
         $this->customerId = $customerId;
 
         $this->history = PembacaanMeter::where('customer_id', $customerId)

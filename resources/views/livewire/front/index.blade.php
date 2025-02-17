@@ -64,63 +64,6 @@
                         </button>
                     </div>
                 </div>
-
-                <!-- Notifications Dropdown -->
-                <div class="relative" x-data="{ showNotifications: false }">
-                    <button @click="showNotifications = !showNotifications" @click.away="showNotifications = false"
-                            class="w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
-                            aria-label="Notifikasi">
-                        <img src="https://img.icons8.com/ios-filled/50/null/bell.png" alt="Notification Icon" class="w-6 h-6 opacity-70">
-                        @if($notificationCount > 0)
-                            <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                                {{ $notificationCount }}
-                            </span>
-                        @endif
-                    </button>
-
-                    <div x-show="showNotifications"
-                         x-transition:enter="transition ease-out duration-200"
-                         x-transition:enter-start="opacity-0 scale-95"
-                         x-transition:enter-end="opacity-100 scale-100"
-                         x-transition:leave="transition ease-in duration-150"
-                         x-transition:leave-start="opacity-100 scale-100"
-                         x-transition:leave-end="opacity-0 scale-95"
-                         class="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg py-2 z-50">
-                        <div class="px-4 py-2 border-b border-gray-200 flex justify-between items-center">
-                            <h3 class="text-sm font-semibold text-gray-900">Notifikasi</h3>
-                            @if($notificationCount > 0)
-                                <button wire:click="markAllNotificationsAsRead" class="text-xs text-blue-600 hover:text-blue-800">
-                                    Tandai semua telah dibaca
-                                </button>
-                            @endif
-                        </div>
-
-                        <div class="max-h-64 overflow-y-auto">
-                            @forelse($notifications as $notification)
-                                <div wire:key="notification-{{ $notification['id'] }}"
-                                     class="block px-4 py-3 hover:bg-gray-50 transition-colors duration-150">
-                                    <div class="flex items-center">
-                                        <div class="w-2 h-2 {{ $notification['read'] ? 'bg-gray-300' : 'bg-blue-500' }} rounded-full mr-3"></div>
-                                        <div class="flex-1">
-                                            <p class="text-sm text-gray-800">{{ $notification['message'] }}</p>
-                                            <p class="text-xs text-gray-500 mt-1">{{ $notification['time'] }}</p>
-                                        </div>
-                                        @if(!$notification['read'])
-                                            <button wire:click="markNotificationAsRead({{ $notification['id'] }})"
-                                                    class="text-xs text-blue-600 hover:text-blue-800">
-                                                Tandai dibaca
-                                            </button>
-                                        @endif
-                                    </div>
-                                </div>
-                            @empty
-                                <div class="px-4 py-3 text-sm text-gray-500">
-                                    Tidak ada notifikasi
-                                </div>
-                            @endforelse
-                        </div>
-                    </div>
-                </div>
             </div>
         </header>
 
@@ -135,7 +78,7 @@
                            class="group relative flex flex-col items-center gap-3 p-4 rounded-xl transition-all duration-200 hover:bg-gray-50"
                            wire:navigate>
                             <div class="w-[45px] h-[45px] flex shrink-0 group-hover:scale-110 transition-transform duration-200">
-                                <img src="https://img.icons8.com/?size=100&id=cX0dPS0YEepJ&format=png&color=000000"
+                                <img src="{{ asset('assets/icons/scan.png') }}"
                                      class="object-cover filter group-hover:brightness-110" alt="icon">
                             </div>
                             <p class="font-medium text-sm text-[#505780] leading-[21px] group-hover:text-[#2C499B] transition-colors duration-200">
@@ -160,8 +103,8 @@
                 <div class="mt-8">
                     <h2 class="text-lg font-semibold text-gray-800 mb-4">Aktivitas Terakhir</h2>
                     <div class="space-y-4">
-                        @forelse($recentActivities as $activity)
-                            <div wire:key="activity-{{ $activity['id'] }}"
+                        @forelse($riwayat as $index => $riwayat)
+                            <div wire:key="riwayat-{{ $riwayat['id'] }}"
                                  class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-150">
                                 <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-4">
                                     <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -171,8 +114,8 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <p class="text-sm font-medium text-gray-800">{{ $activity['action'] }}</p>
-                                    <p class="text-xs text-gray-500">{{ $activity['time'] }}</p>
+                                    <p class="text-sm font-medium text-gray-800">{{ $riwayat['jenis_tindakan'] }}</p>
+                                    <p class="text-xs text-gray-500">{{ \Carbon\Carbon::parse($riwayat['created_at'])->diffForHumans() }}</p>
                                 </div>
                             </div>
                         @empty
@@ -186,19 +129,5 @@
         </div>
 
         @livewire('components.menu-bar')
-
-        <!-- Toast Notifications -->
-        <div x-data="{ show: false, message: '' }"
-             @notification.window="show = true; message = $event.detail.message; setTimeout(() => show = false, 3000)"
-             x-show="show"
-             x-transition:enter="transition ease-out duration-300"
-             x-transition:enter-start="opacity-0 transform translate-y-2"
-             x-transition:enter-end="opacity-100 transform translate-y-0"
-             x-transition:leave="transition ease-in duration-200"
-             x-transition:leave-start="opacity-100 transform translate-y-0"
-             x-transition:leave-end="opacity-0 transform translate-y-2"
-             class="fixed bottom-20 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-full shadow-lg z-50">
-            <p x-text="message" class="text-sm"></p>
-        </div>
     </section>
 </div>
