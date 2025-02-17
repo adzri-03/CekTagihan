@@ -66,26 +66,39 @@
             </div>
         </header>
 
-        <!-- Main Content -->
-        <div id="Feature" class="px-6 relative z-10">
+          <!-- Main Content -->
+          <div id="Feature" class="px-6 relative z-10">
             <div class="bg-white/90 backdrop-blur-sm p-6 rounded-2xl shadow-xl">
                 <div>
-                    <h2 class="text-lg font-bold">History Pembacaan Meter</h2>
+                    <h2 class="text-lg font-bold mb-4">Riwayat Pembacaan Meter</h2>
                     
                     @if ($history->count() > 0)
-                        <ul class="mt-4 space-y-2">
-                            @foreach ($history as $item)
-                                <li class="p-4 bg-white shadow rounded-lg">
-                                    <p><strong>Tanggal:</strong> {{ $item->created_at->format('d M Y') }}</p>
-                                    <p><strong>Meter Awal:</strong> {{ $item->meter_awal }}</p>
-                                    <p><strong>Meter Akhir:</strong> {{ $item->meter_akhir }}</p>
-                                    <p><strong>Pemakaian:</strong> {{ $item->pemakaian }} m³</p>
-                                    <p><strong>Total Biaya:</strong> Rp {{ number_format($item->total, 0, ',', '.') }}</p>
-                                </li>
-                            @endforeach
-                        </ul>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full border border-gray-300 rounded-lg shadow-sm">
+                                <thead class="bg-gray-100">
+                                    <tr>
+                                        <th class="border px-4 py-2 text-left">Tanggal</th>
+                                        <th class="border px-4 py-2 text-left">Meter Awal</th>
+                                        <th class="border px-4 py-2 text-left">Meter Akhir</th>
+                                        <th class="border px-4 py-2 text-left">Pemakaian</th>
+                                        <th class="border px-4 py-2 text-left">Total Biaya</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($history as $item)
+                                        <tr class="bg-white hover:bg-gray-50">
+                                            <td class="border px-4 py-2">{{ $item->created_at->format('d M Y') }}</td>
+                                            <td class="border px-4 py-2">{{ $item->meter_awal }}</td>
+                                            <td class="border px-4 py-2">{{ $item->meter_akhir }}</td>
+                                            <td class="border px-4 py-2">{{ $item->pemakaian }} m³</td>
+                                            <td class="border px-4 py-2">Rp {{ number_format($item->total, 0, ',', '.') }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     @else
-                        <p class="text-gray-500">Belum ada riwayat pembacaan meter.</p>
+                        <p class="text-gray-500 text-center">Belum ada riwayat pembacaan meter.</p>
                     @endif
                 </div>
             </div>
