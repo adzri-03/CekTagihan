@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('meter_awal')->default(0);
             $table->integer('meter_akhir')->default(0);
             $table->integer('pemakaian')->default(0);
-            $table->integer('total', 10,2)->default(0);
+            $table->integer('total', 10, 2)->default(0);
             $table->timestamps();
         });
     }
