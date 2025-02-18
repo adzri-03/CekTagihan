@@ -35,6 +35,7 @@
         @livewireScripts
         <script src="https://unpkg.com/html5-qrcode"></script>
         <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     </body>
 </html>

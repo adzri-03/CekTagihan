@@ -66,43 +66,72 @@
             </div>
         </header>
 
-          <!-- Main Content -->
-          <div id="Feature" class="px-6 relative z-10">
+         <!-- Main Content -->
+        <div id="Feature" class="px-6 relative z-10" x-data="{ openModal: false, invoiceData: null }">
             <div class="bg-white/90 backdrop-blur-sm p-6 rounded-2xl shadow-xl">
-                <div>
-                    <h2 class="text-lg font-bold mb-4">Riwayat Pembacaan Meter</h2>
-                    
-                    @if ($history->count() > 0)
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full border border-gray-300 rounded-lg shadow-sm">
-                                <thead class="bg-gray-100">
-                                    <tr>
-                                        <th class="border px-4 py-2 text-left">Tanggal</th>
-                                        <th class="border px-4 py-2 text-left">Meter Awal</th>
-                                        <th class="border px-4 py-2 text-left">Meter Akhir</th>
-                                        <th class="border px-4 py-2 text-left">Pemakaian</th>
-                                        <th class="border px-4 py-2 text-left">Total Biaya</th>
+                <h2 class="text-lg font-bold mb-4">Riwayat Pembacaan Meter</h2>
+
+                @if ($history->count() > 0)
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full border border-gray-300 rounded-lg shadow-sm">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th class="border px-4 py-2 text-left">Tanggal</th>
+                                    <th class="border px-4 py-2 text-left">Meter Awal</th>
+                                    <th class="border px-4 py-2 text-left">Meter Akhir</th>
+                                    <th class="border px-4 py-2 text-left">Pemakaian</th>
+                                    <th class="border px-4 py-2 text-left">Total Biaya</th>
+                                    <th class="border px-4 py-2 text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($history as $item)
+                                    <tr class="bg-white hover:bg-gray-50">
+                                        <td class="border px-4 py-2">{{ $item->created_at->format('d M Y') }}</td>
+                                        <td class="border px-4 py-2">{{ $item->meter_awal }}</td>
+                                        <td class="border px-4 py-2">{{ $item->meter_akhir }}</td>
+                                        <td class="border px-4 py-2">{{ $item->pemakaian }} m³</td>
+                                        <td class="border px-4 py-2">Rp {{ number_format($item->total, 0, ',', '.') }}</td>
+                                        <td class="border px-4 py-2 text-center">
+                                            <button @click="openModal = true; invoiceData = {{ json_encode($item) }}"
+                                                class="bg-blue-500 hover:bg-blue-600 text-white text-sm font-semibold py-2 px-3 rounded-lg shadow">
+                                                Lihat Nota
+                                            </button>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($history as $item)
-                                        <tr class="bg-white hover:bg-gray-50">
-                                            <td class="border px-4 py-2">{{ $item->created_at->format('d M Y') }}</td>
-                                            <td class="border px-4 py-2">{{ $item->meter_awal }}</td>
-                                            <td class="border px-4 py-2">{{ $item->meter_akhir }}</td>
-                                            <td class="border px-4 py-2">{{ $item->pemakaian }} m³</td>
-                                            <td class="border px-4 py-2">Rp {{ number_format($item->total, 0, ',', '.') }}</td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    @else
-                        <p class="text-gray-500 text-center">Belum ada riwayat pembacaan meter.</p>
-                    @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @else
+                    <p class="text-gray-500 text-center">Belum ada riwayat pembacaan meter.</p>
+                @endif
+            </div>
+
+            <!-- MODAL -->
+            <div x-show="openModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" x-transition>
+                <div class="bg-white rounded-lg shadow-lg w-96 p-6 relative">
+                    <button @click="openModal = false" class="absolute top-3 right-3 text-gray-500 hover:text-red-500">
+                        ✖
+                    </button>
+                    <h2 class="text-xl font-bold mb-4 text-center">Invoice Pembacaan Meter</h2>
+                    
+                    <div class="bg-gray-100 p-4 rounded-lg shadow-inner">
+                        <p><strong>Tanggal:</strong> <span x-text="invoiceData.created_at"></span></p>
+                        <p><strong>Meter Awal:</strong> <span x-text="invoiceData.meter_awal"></span></p>
+                        <p><strong>Meter Akhir:</strong> <span x-text="invoiceData.meter_akhir"></span></p>
+                        <p><strong>Pemakaian:</strong> <span x-text="invoiceData.pemakaian"></span> m³</p>
+                        <p><strong>Total Biaya:</strong> Rp <span x-text="new Intl.NumberFormat('id-ID').format(invoiceData.total)"></span></p>
+                    </div>
+                    
+                    <div class="mt-4 flex justify-between">
+                        <button @click="openModal = false"
+                            class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">Tutup</button>
+                        <a :href="'/download-invoice/' + invoiceData.id" target="_blank"
+                            class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">Download PDF</a>
+                    </div>
                 </div>
             </div>
-        </div>
         
         @livewire('components.menu-bar')
     </section>

@@ -4,11 +4,10 @@ use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Livewire\Front\Index;
 use App\Livewire\Front\Hitung;
-use Filament\Facades\Filament;
 use App\Livewire\Front\History;
 use App\Livewire\Front\ScanPage;
+use App\Http\Controllers\Invoice;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\API\CountMeterController;
@@ -34,6 +33,9 @@ Route::middleware(['auth'])->group(function () {
         ->name('api.invoice');
     Route::post('/hitung', [CountMeterController::class, 'store'])->name('hitung');
     Route::get('/history', History::class)->name('front.history');
+    Route::get('/download-invoice/{id}', [Invoice::class, 'download'])->name('download.invoice');
+
+ 
 
     Route::get('/download-pdf/{filename}', function ($filename) {
         return Storage::disk('public')->download($filename);
