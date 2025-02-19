@@ -27,6 +27,8 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->id('admin')
             ->path('admin')
+            ->brandLogo(asset('assets/icons/mter.png')) 
+            ->brandLogoHeight('50px')
             ->colors([
                 'primary' => Color::Amber,
             ])

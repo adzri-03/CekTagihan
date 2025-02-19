@@ -36,7 +36,11 @@ new #[Layout('layouts.guest')] class extends Component
     }
 }; ?>
 
-<div>
+<div class="card-register">
+    <div class="flex flex-col items-center">
+        <img src="{{ asset('assets/icons/mter.png') }}" class="w-24 h-24" alt="PDAM Logo">
+        <h2 class="text-xl font-semibold mt-5 mb-10 text-gray-700">Login</h2>
+    </div>
     <form wire:submit="register">
         <!-- Name -->
         <div>
