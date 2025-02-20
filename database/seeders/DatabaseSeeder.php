@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             'phone' => fake()->phoneNumber(),
             'role' => 'admin',
             'remember_token' => Str::random(10),
+            'status' => true,
         ]);
 
         $role = Role::create(['name' => 'admin']);

@@ -11,11 +11,12 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\API\CountMeterController;
+use App\Http\Middleware\EnsureUserIsActive;
 
 
 Route::redirect('/', '/login');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', EnsureUserIsActive::class])->group(function () {
 
     Route::middleware('can:admin')->group(function () {
         Route::redirect('dashboard', '/admin')
@@ -34,8 +35,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/hitung', [CountMeterController::class, 'store'])->name('hitung');
     Route::get('/history', History::class)->name('front.history');
     Route::get('/download-invoice/{id}', [Invoice::class, 'download'])->name('download.invoice');
-
- 
 
     Route::get('/download-pdf/{filename}', function ($filename) {
         return Storage::disk('public')->download($filename);

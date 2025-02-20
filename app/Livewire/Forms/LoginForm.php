@@ -28,18 +28,30 @@ class LoginForm extends Form
      */
     public function authenticate(): void
     {
-        $this->ensureIsNotRateLimited();
+        // Cek apakah user ada
+        $user = Auth::getProvider()->retrieveByCredentials(['email' => $this->email]);
 
-        if (! Auth::attempt($this->only(['email', 'password']), $this->remember)) {
-            RateLimiter::hit($this->throttleKey());
-
+        if (!$user) {
             throw ValidationException::withMessages([
-                'form.email' => trans('Email atau password salah'),
+                'form.email' => trans('Email atau password salah.'),
             ]);
         }
 
-        RateLimiter::clear($this->throttleKey());
+        // Cek apakah user sudah diaktifkan
+        if ($user->status == 0) {
+            throw ValidationException::withMessages([
+                'form.email' => trans('Akun Anda belum diaktivasi oleh admin.'),
+            ]);
+        }
+
+        // Coba login
+        if (!Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
+            throw ValidationException::withMessages([
+                'form.email' => trans('Email atau password salah.'),
+            ]);
+        }
     }
+
 
     /**
      * Ensure the authentication request is not rate limited.
@@ -67,6 +79,6 @@ class LoginForm extends Form
      */
     protected function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->email).'|'.request()->ip());
+        return Str::transliterate(Str::lower($this->email) . '|' . request()->ip());
     }
 }

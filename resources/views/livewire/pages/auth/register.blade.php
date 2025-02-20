@@ -28,11 +28,13 @@ new #[Layout('layouts.guest')] class extends Component
 
         $validated['password'] = Hash::make($validated['password']);
 
+        $validated['status'] = 0;
+
         event(new Registered($user = User::create($validated)));
 
-        Auth::login($user);
+        session()->flash('status', 'Akun anda telah terdaftar, menunggu untuk diaktivasi oleh admin.');
 
-        $this->redirect(route('dashboard', absolute: false), navigate: true);
+        $this->redirect(route('login', absolute: false), navigate: true);
     }
 }; ?>
 
