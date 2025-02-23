@@ -40,58 +40,41 @@ new #[Layout('layouts.guest')] class extends Component {
 };
 ?>
 
-<div class="card-login p-8 shadow-md w-[450px]">
-    <div class="flex flex-col items-center">
-        <img src="{{ asset('assets/icons/meteran.png') }}" class="w-24 h-24" alt="PDAM Logo">
-        <h2 class="text-xl font-semibold mt-5 mb-10 text-gray-700">Halaman login Untuk Petugas</h2>
+<section id="content" class="max-w-[640px] w-full min-h-screen mx-auto flex flex-col bg-white overflow-x-hidden relative">
+    <div class="w-full h-[303px] flex shrink-0 overflow-hidden">
+        <img src="{{ asset('assets/images/bg-login.png') }}" class="w-full h-full object-cover" alt="background" loading="lazy">
     </div>
-
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
-
-    <form wire:submit="login" class="space-y-6">
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model="form.email" id="email" class="block mt-1 w-full" type="email"
-                name="email" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('form.email')" class="mt-2 text-red-500" />
-        </div>
-
-        <!-- Password -->
-        <div>
-            <x-input-label for="password" :value="__('Password')" />
-            <x-text-input wire:model="form.password" id="password" class="block mt-1 w-full" type="password"
-                name="password" required autocomplete="current-password" />
-            <x-input-error :messages="$errors->get('form.password')" class="mt-2 text-red-500" />
-        </div>
-
-        <!-- Remember Me -->
-        <div class="flex items-center">
-            <input wire:model="form.remember" id="remember" type="checkbox"
-                class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" name="remember">
-            <label for="remember" class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</label>
-        </div>
-
-        <!-- Login Button -->
-        <div class="flex justify-between items-center">
-            @if (Route::has('password.request'))
-                <a class="text-sm text-indigo-600 hover:text-indigo-800" href="{{ route('password.request') }}" wire:navigate>
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
-
-            <x-primary-button class="bg-indigo-600 text-white hover:bg-indigo-700 px-4 py-2 rounded-lg">
-                {{ __('Log in') }}
-            </x-primary-button>
-        </div>
-
-        <!-- Register Button -->
-        <div class="text-center mt-4">
-            <button type="button" class="text-sm text-gray-700 hover:text-gray-900"
-                onclick="window.location.href='{{ route('register') }}'">
-                {{ __('Create an account') }}
+    <form wire:submit="login" class="flex flex-col justify-between flex-1 px-[18px] pt-8 pb-6">
+        <div class="flex flex-col gap-5">
+            <div class="flex flex-col gap-1 items-center justify-center text-center">
+                <img src="{{ asset('assets/icons/meteran.png') }}" class="w-24 h-24" alt="PDAM Logo">
+                <h1 class="font-semibold text-2xl leading-[36px]">Login Page </h1>
+                <p class="font-medium text-sm leading-[21px] text-[#757C98]">Excited to have you on board!</p>
+            </div>
+            <div class="flex flex-col gap-6">
+                <div class="input-container flex flex-col gap-2">
+                    <p class="font-medium text-sm leading-[21px]">Email Address</p>
+                    <input wire:model="form.email" id="email" class="appearance-none outline-none w-full bg-white border border-[#DCDFE6] rounded-lg p-3 placeholder:text-[#757C98] placeholder:font-medium text-sm font-semibold" type="email" name="email" placeholder="example@gmail.com" required>
+                    @error('form.email')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div class="input-container flex flex-col gap-2">
+                    <p class="font-medium text-sm leading-[21px]">Password</p>
+                    <input wire:model="form.password" id="password" class="appearance-none outline-none w-full bg-white border border-[#DCDFE6] rounded-lg p-3 placeholder:text-[#757C98] placeholder:font-medium text-sm font-semibold" type="password" name="password" placeholder="Enter your password" required>
+                </div>
+                <div class="flex items-center justify-between mt-1">
+                    <label class="font-medium text-sm leading-[21px] text-[#757C98] flex items-center gap-[6px]">
+                        <input wire:model="form.remember" type="checkbox" id="remember" class="w-5 h-5 appearance-none checked:border-2 checked:border-solid checked:border-white rounded-md checked:bg-[#4041DA] ring-1 ring-[#757C98] transition-all duration-300">
+                        <span class="peer-checked:text-[#070625] transition-all duration-300">Remember me</span>
+                    </label>
+                    <a href="{{ route('password.request') }}" class="font-medium text-sm leading-[21px] text-[#757C98]">Forgot Password?</a>
+                </div>
+            </div>
+            <button type="submit" class="!bg-[#4041DA] p-[12px_24px] h-12 flex items-center gap-3 rounded-lg justify-center">
+                <p class="font-semibold text-sm leading-[21px] text-white">Sign In</p>
             </button>
         </div>
+        <p class="font-medium text-sm leading-[21px] text-[#757C98] text-center mt-3">Don’t have an account? <a href="{{ route('register') }}" class="font-semibold text-[#4041DA]">Create Account</a></p>
     </form>
-</div>
+</section>
