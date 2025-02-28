@@ -1,29 +1,37 @@
 <section id="content"
     class="max-w-[640px] w-full min-h-screen mx-auto flex flex-col bg-[#F8F8F8] overflow-x-hidden pb-[122px] relative">
     <div class="mx-4 my-4">
+        <div class="top-menu flex justify-between items-center my-3">
+            <a href="{{ route('front.index') }}" class="flex items-center space-x-2">
+            <div class="w-[48px] h-[48px] flex shrink-0">
+                <img src="assets/icons/back.svg" alt="icon">
+            </div>
+            <span class="text-lg font-semibold text-gray-700 hover:text-gray-900 transition-colors">Kembali</span>
+            </a>
+        </div>
         <!-- Main Content -->
-        <h2 class="text-lg font-bold">Daftar Pelanggan</h2>
+        <h2 class="text-lg font-bold mb-4">Daftar Pelanggan</h2>
 
         <!-- Customer Table -->
-        <div class="overflow-x-auto">
-            <table class="w-full border border-collapse zebra">
+        <div class="overflow-x-auto rounded-lg shadow-lg max-w-full">
+            <table class="min-w-full bg-white">
                 <thead>
                     <tr>
-                        <th>No.</th>
-                        <th>Kode PAM</th>
-                        <th>Nama</th>
-                        <th>Alamat</th>
-                        <th>No. Handphone</th>
+                        <th class="py-3 px-6 bg-indigo-50 text-left text-xs font-semibold uppercase tracking-wider border-b border-indigo-100">No.</th>
+                        <th class="py-3 px-6 bg-indigo-50 text-left text-xs font-semibold uppercase tracking-wider border-b border-indigo-100">Kode PAM</th>
+                        <th class="py-3 px-6 bg-indigo-50 text-left text-xs font-semibold uppercase tracking-wider border-b border-indigo-100">Nama</th>
+                        <th class="py-3 px-6 bg-indigo-50 text-left text-xs font-semibold uppercase tracking-wider border-b border-indigo-100">Alamat</th>
+                        <th class="py-3 px-6 bg-indigo-50 text-left text-xs font-semibold uppercase tracking-wider border-b border-indigo-100">No. Handphone</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-gray-200">
                     @forelse ($customers as $index => $customer)
-                        <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>{{ $customer->pam_code }}</td>
-                            <td>{{ $customer->name }}</td>
-                            <td>{{ $customer->address }}</td>
-                            <td>{{ $customer->phone }}</td>
+                        <tr class="hover:bg-gray-50 transition-colors duration-200">
+                            <td class="py-1 px-6 text-sm font-medium text-gray-900">{{ $index + 1 }}</td>
+                            <td class="py-1 px-2 text-sm font-medium text-gray-900">{{ $customer->pam_code }}</td>
+                            <td class="py-1 px-2 text-sm font-medium text-gray-900">{{ $customer->name }}</td>
+                            <td class="py-1 px-2 text-sm font-medium text-gray-900">{{ $customer->address }}</td>
+                            <td class="py-1 px-2 text-sm font-medium text-gray-900">{{ $customer->phone }}</td>
                         </tr>
                     @empty
                         <tr>
