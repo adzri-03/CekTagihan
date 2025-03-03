@@ -28,24 +28,24 @@
             </svg>
         </div>
 
-        <header class="relative h-[376px] flex flex-col justify-start overflow-hidden -mb-[106px] z-10">
+        <header class="relative h-[320px] sm:h-[376px] flex flex-col justify-start overflow-hidden -mb-[106px] z-10">
             <!-- Greeting Section -->
-            <div class="absolute left-0 right-0 flex flex-col items-center text-white pb-4 z-10 mt-16">
-                <h1 class="text-3xl font-bold mb-2 text-shadow">
+            <div class="absolute left-0 right-0 flex flex-col items-center text-white pb-4 z-10 mt-12 sm:mt-16">
+                <h1 class="text-2xl sm:text-3xl font-bold mb-2 text-shadow">
                     <span class="greeting">{{ $greeting }}, </span>
                     {{ $userName }}
                 </h1>
-                <p class="text-lg font-medium opacity-90 text-shadow">{{ $currentDate }}</p>
+                <p class="text-base sm:text-lg font-medium opacity-90 text-shadow">{{ $currentDate }}</p>
             </div>
 
             <!-- Header Icons -->
-            <div class="absolute top-10 right-6 flex gap-4 z-10">
+            <div class="absolute top-4 sm:top-10 right-4 sm:right-6 flex gap-3 sm:gap-4 z-10">
                 <!-- User Profile Dropdown -->
                 <div class="relative" x-data="{ isOpen: false }">
                     <button @click="isOpen = !isOpen" @click.away="isOpen = false"
-                            class="w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
+                            class="w-10 h-10 sm:w-12 sm:h-12 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
                             aria-label="Profil User">
-                        <img src="https://img.icons8.com/ios-filled/50/null/user.png" alt="User Icon" class="w-6 h-6 opacity-70">
+                        <img src="https://img.icons8.com/ios-filled/50/null/user.png" alt="User Icon" class="w-5 h-5 sm:w-6 sm:h-6 opacity-70">
                     </button>
 
                     <div x-show="isOpen"
@@ -55,7 +55,7 @@
                          x-transition:leave="transition ease-in duration-150"
                          x-transition:leave-start="opacity-100 scale-100"
                          x-transition:leave-end="opacity-0 scale-95"
-                         class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg py-2 z-50">
+                         class="absolute right-0 mt-2 w-40 sm:w-48 bg-white rounded-xl shadow-lg py-2 z-50">
                         <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
                         <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
                         <hr class="my-2">
@@ -68,31 +68,31 @@
         </header>
 
         <!-- Main Content -->
-        <div id="Feature" class="px-6 relative z-10">
-            <div class="bg-white/90 backdrop-blur-sm p-6 rounded-2xl shadow-xl">
+        <div id="Feature" class="px-4 sm:px-6 relative z-10">
+            <div class="bg-white/90 backdrop-blur-sm p-4 sm:p-6 rounded-2xl shadow-xl">
                 <!-- Quick Actions -->
-                <div class="mb-6">
-                    <h2 class="text-lg font-semibold text-gray-800 mb-4">Menu Cepat</h2>
-                    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                <div class="mb-5 sm:mb-6">
+                    <h2 class="text-bas sm:text-lg font-semibold text-gray-800 mb-3 sm:mb-4">Menu Cepat</h2>
+                    <div class="grid grid-cols-3 gap-2 sm:gap-8">
                         <a href="{{ route('front.scan') }}"
-                           class="group relative flex flex-col items-center gap-3 p-4 rounded-xl transition-all duration-200 hover:bg-gray-50"
+                           class="group relative flex flex-col items-center gap-2 sm:gap-3 p-2 sm:p-4 rounded-xl transition-all duration-200 hover:bg-gray-50"
                            wire:navigate>
-                            <div class="w-[45px] h-[45px] flex shrink-0 group-hover:scale-110 transition-transform duration-200">
+                            <div class="w-[35px] h-[35px] sm:w-[45px] sm:h-[45px] flex shrink-0 group-hover:scale-110 transition-transform duration-200">
                                 <img src="{{ asset('assets/icons/scan.png') }}"
                                      class="object-cover filter group-hover:brightness-110" alt="icon">
                             </div>
-                            <p class="font-medium text-sm text-[#505780] leading-[21px] group-hover:text-[#2C499B] transition-colors duration-200">
+                            <p class="font-medium text-xs sm:text-sm text-[#505780] leading-tight sm:leading-[21px] group-hover:text-[#2C499B] transition-colors duration-200 text-center">
                                 Hitung
                             </p>
                         </a>
                         <a href="{{ route('front.history') }}"
-                           class="group relative flex flex-col items-center gap-3 p-4 rounded-xl transition-all duration-200 hover:bg-gray-50"
+                           class="group relative flex flex-col items-center gap-2 sm:gap-3 p-2 sm:p-4 rounded-xl transition-all duration-200 hover:bg-gray-50"
                            wire:navigate>
-                            <div class="w-[45px] h-[45px] flex shrink-0 group-hover:scale-110 transition-transform duration-200">
+                            <div class="w-[35px] h-[35px] sm:w-[45px] sm:h-[45px] flex shrink-0 group-hover:scale-110 transition-transform duration-200">
                                 <img src="{{ asset('assets/icons/history.png') }}"
                                      class="object-cover filter group-hover:brightness-110" alt="icon">
                             </div>
-                            <p class="font-medium text-sm text-[#505780] leading-[21px] group-hover:text-[#2C499B] transition-colors duration-200">
+                            <p class="font-medium text-xs sm:text-sm text-[#505780] leading-tight sm:leading-[21px] group-hover:text-[#2C499B] transition-colors duration-200 text-center">
                                 Riwayat
                             </p>
                         </a>
@@ -100,26 +100,26 @@
                 </div>
 
                 <!-- Recent Activities -->
-                <div class="mt-8">
-                    <h2 class="text-lg font-semibold text-gray-800 mb-4">Aktivitas Terakhir</h2>
-                    <div class="space-y-4">
+                <div class="mt-6 sm:mt-8">
+                    <h2 class="text-base sm:text-lg font-semibold text-gray-800 mb-3 sm:mb-4">Aktivitas Terakhir</h2>
+                    <div class="space-y-3 sm:space-y-4">
                         @forelse($riwayat as $index => $riwayat)
                             <div wire:key="riwayat-{{ $riwayat['id'] }}"
-                                 class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-150">
-                                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-4">
-                                    <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                 class="flex items-center p-2 sm:p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-150">
+                                <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3 sm:mr-4 flex-shrink-0">
+                                    <svg class="w-4 h-4 sm:w-5 sm:h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                               d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
                                         </path>
                                     </svg>
                                 </div>
-                                <div>
-                                    <p class="text-sm font-medium text-gray-800">{{ $riwayat['jenis_tindakan'] }}</p>
-                                    <p class="text-xs text-gray-500">{{ \Carbon\Carbon::parse($riwayat['created_at'])->diffForHumans() }}</p>
+                                <div class="min-w-0">
+                                    <p class="text-xs sm:text-sm font-medium text-gray-800 truncate">{{ $riwayat['jenis_tindakan'] }}</p>
+                                    <p class="text-2xs sm:text-xs text-gray-500">{{ \Carbon\Carbon::parse($riwayat['created_at'])->diffForHumans() }}</p>
                                 </div>
                             </div>
                         @empty
-                            <div class="text-sm text-gray-500 text-center py-4">
+                            <div class="text-xs sm:text-sm text-gray-500 text-center py-3 sm:py-4">
                                 Belum ada aktivitas
                             </div>
                         @endforelse

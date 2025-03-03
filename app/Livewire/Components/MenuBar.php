@@ -10,7 +10,7 @@ class MenuBar extends Component
 
     public $menus = [
         [
-            'name' => 'Index',
+            'name' => 'Home',
             'icon' => 'home.png',
             'route' => 'front.index',
         ],
