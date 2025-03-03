@@ -58,9 +58,9 @@
                         <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
                         <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
                         <hr class="my-2">
-                        <button wire:click="logout" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
-                            Logout
-                        </button>
+                        <a href="/index" class="block px-4 py-2 text-sm text-blue-600 hover:bg-gray-100">
+                            Home
+                        </a>
                     </div>
                 </div>
             </div>
@@ -72,27 +72,27 @@
                 <h2 class="text-lg font-bold mb-4">Riwayat Pembacaan Meter</h2>
 
                 @if ($history->count() > 0)
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full border border-gray-300 rounded-lg shadow-sm">
-                            <thead class="bg-gray-100">
+                    <div class="overflow-x-auto max-w-full">
+                        <table class="min-w-max border border-gray-300 rounded-lg shadow-sm">
+                            <thead class="bg-gray-100"
                                 <tr>
-                                    <th class="border px-4 py-2 text-left">Tanggal</th>
-                                    <th class="border px-4 py-2 text-left">Meter Awal</th>
-                                    <th class="border px-4 py-2 text-left">Meter Akhir</th>
-                                    <th class="border px-4 py-2 text-left">Pemakaian</th>
-                                    <th class="border px-4 py-2 text-left">Total Biaya</th>
-                                    <th class="border px-4 py-2 text-center">Aksi</th>
+                                    <th class="border px-4 py-2 text-left text-xm whitespace-nowrap">Tanggal</th>
+                                    <th class="border px-4 py-2 text-left text-xm  whitespace-nowrap">Meter Awal</th>
+                                    <th class="border px-4 py-2 text-left text-xm  whitespace-nowrap">Meter Akhir</th>
+                                    <th class="border px-4 py-2 text-left text-xm  whitespace-nowrap">Pemakaian</th>
+                                    <th class="border px-4 py-2 text-left text-xm  whitespace-nowrap">Total Biaya</th>
+                                    <th class="border px-4 py-2 text-center text-xm  whitespace-nowrap">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($history as $item)
                                     <tr class="bg-white hover:bg-gray-50">
-                                        <td class="border px-4 py-2">{{ $item->created_at->format('d M Y') }}</td>
-                                        <td class="border px-4 py-2">{{ $item->meter_awal }}</td>
-                                        <td class="border px-4 py-2">{{ $item->meter_akhir }}</td>
-                                        <td class="border px-4 py-2">{{ $item->pemakaian }} m³</td>
-                                        <td class="border px-4 py-2">Rp {{ number_format($item->total, 0, ',', '.') }}</td>
-                                        <td class="border px-4 py-2 text-center">
+                                        <td class="border px-4 py-2 text-xm">{{ $item->created_at->format('d M Y') }}</td>
+                                        <td class="border px-4 py-2 text-xm">{{ $item->meter_awal }}</td>
+                                        <td class="border px-4 py-2 text-xm">{{ $item->meter_akhir }}</td>
+                                        <td class="border px-4 py-2 text-xm">{{ $item->pemakaian }} m³</td>
+                                        <td class="border px-4 py-2 text-xm">Rp {{ number_format($item->total, 0, ',', '.') }}</td>
+                                        <td class="border px-4 py-2 text-center text-xm">
                                             <button @click="openModal = true; invoiceData = {{ json_encode($item) }}"
                                                 class="bg-blue-500 hover:bg-blue-600 text-white text-sm font-semibold py-2 px-3 rounded-lg shadow">
                                                 Lihat Nota
