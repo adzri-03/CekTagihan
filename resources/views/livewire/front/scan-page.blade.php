@@ -75,7 +75,7 @@
                         <h3 class="text-lg font-bold text-gray-900">Scan QR Code</h3>
                         <div class="mt-4 flex justify-center">
                             <div id="reader"
-                                class="w-full max-w-[350px] h-[350px] border border-gray-300 rounded-md"></div>
+                                class="w-full max-w-[350px] h-[260px] border border-gray-300 rounded-md"></div>
                         </div>
                         <div id="scanner-loading"
                             class="absolute inset-0 bg-white/80 flex items-center justify-center hidden">
@@ -88,7 +88,6 @@
                                     d="M5 13l4 4L19 7" />
                             </svg>
                         </div>
-                        <p id="scan-error-message" class="text-red-500 text-sm mt-2 hidden"></p>
                     </div>
                 </div>
 
@@ -120,25 +119,18 @@
             modal: document.getElementById('scannerModal'),
             reader: document.getElementById('reader'),
             loading: document.getElementById('scanner-loading'),
-            error: document.getElementById('scan-error-message'),
             success: document.getElementById('scan-success-feedback'),
         };
 
         // UI Methods
         const showLoading = () => elements.loading.classList.remove('hidden');
         const hideLoading = () => elements.loading.classList.add('hidden');
-        const showError = (message) => {
-            elements.error.textContent = message;
-            elements.error.classList.remove('hidden');
-        };
-        const hideError = () => elements.error.classList.add('hidden');
         const showSuccess = () => elements.success.classList.remove('hidden');
         const hideSuccess = () => elements.success.classList.add('hidden');
 
         const initScanner = async () => {
             try {
                 showLoading();
-                hideError();
 
                 await destroyScanner();
 
@@ -159,18 +151,17 @@
                 await scanner.start(
                     cameraId, {
                         fps: 10,
-                        qrbox: 250,
+                        qrbox: 350,
                         experimentalFeatures: {
                             useBarCodeDetectorIfSupported: false
                         },
                         supportedScanFormats: [Html5Qrcode.SCAN_TYPE_QR_CODE]
                     },
                     handleScanSuccess,
-                    handleScanError
                 );
                 console.log('Scanner started successfully');
             } catch (error) {
-                handleError(error);
+                console.error('Error, terjadi kesalahan', error.message)
             } finally {
                 hideLoading();
             }
@@ -190,7 +181,6 @@
 
         const retryScanner = async () => {
             console.log('retried');
-            hideError();
             await destroyScanner();
             await initScanner();
         }
@@ -209,23 +199,6 @@
             }, 1500);
         };
 
-        const handleScanError = (error) => {
-            if (error.includes('No QR code found')) return;
-            showError(error);
-        };
-
-        const handleError = (error) => {
-            const errorMessages = {
-                'NotAllowedError': 'Izin kamera ditolak. Silakan izinkan akses kamera dan coba lagi.',
-                'NotFoundError': 'Kamera tidak ditemukan. Pastikan perangkat Anda memiliki kamera.',
-                'NotReadableError': 'Kamera sedang digunakan aplikasi lain. Tutup aplikasi lain yang menggunakan kamera.',
-                'OverconstrainedError': 'Tidak dapat mengakses kamera yang dipilih.',
-                'SecurityError': 'Akses kamera diblokir oleh kebijakan keamanan.',
-                'AbortError': 'Akses kamera dibatalkan.'
-            };
-            showError(errorMessages[error.name] || 'Terjadi kesalahan saat mengakses kamera');
-        };
-
         // Public Methods
         const openModal = () => {
             elements.modal.classList.remove('hidden');
@@ -237,7 +210,6 @@
             elements.modal.classList.add('hidden');
             elements.modal.classList.remove('flex');
             destroyScanner();
-            hideError();
         };
 
         // Event Listeners
