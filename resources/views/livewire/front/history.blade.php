@@ -38,36 +38,22 @@
             </div>
 
             <!-- Header Icons -->
-            <div class="absolute top-10 right-6 flex gap-4 z-10">
-                <!-- User Profile Dropdown -->
-                <div class="relative" x-data="{ isOpen: false }">
-                    <button @click="isOpen = !isOpen" @click.away="isOpen = false"
-                            class="w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
-                            aria-label="Profil User">
-                        <img src="https://img.icons8.com/ios-filled/50/null/user.png" alt="User Icon" class="w-6 h-6 opacity-70">
-                    </button>
-
-                    <div x-show="isOpen"
-                         x-transition:enter="transition ease-out duration-200"
-                         x-transition:enter-start="opacity-0 scale-95"
-                         x-transition:enter-end="opacity-100 scale-100"
-                         x-transition:leave="transition ease-in duration-150"
-                         x-transition:leave-start="opacity-100 scale-100"
-                         x-transition:leave-end="opacity-0 scale-95"
-                         class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg py-2 z-50">
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
-                        <hr class="my-2">
-                        <a href="/index" class="block px-4 py-2 text-sm text-blue-600 hover:bg-gray-100">
-                            Home
-                        </a>
-                    </div>
-                </div>
-            </div>
+            
+    
         </header>
 
          <!-- Main Content -->
+  
         <div id="Feature" class="px-6 relative z-10" x-data="{ openModal: false, invoiceData: null }">
+            <div class="top-menu flex justify-between items-center my-0 ml-7">
+                <a href="{{ route('front.index') }}" class="flex items-center space-x-2">
+                <div class="w-[48px] h-[48px] flex shrink-0">
+                    <img src="assets/icons/back.svg" alt="icon">
+                </div>
+                <span class="text-lg font-semibold text-gray-500 hover:text-gray-900 transition-colors">Kembali</span>
+                </a>
+            </div>
+
             <div class="bg-white/90 backdrop-blur-sm p-6 rounded-2xl shadow-xl">
                 <h2 class="text-lg font-bold mb-4">Riwayat Pembacaan Meter</h2>
 
