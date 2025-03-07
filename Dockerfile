@@ -1,4 +1,4 @@
-FROM php:8.3-fpm
+FROM php:8.2-fpm
 
 ARG user
 ARG uid
@@ -20,13 +20,17 @@ RUN apt-get update && apt-get install -y \
 RUN apt-get clean && rm -rf /var/www/lib/apt/lists/*
 
 # Install Imagick
-RUN apt-get install -y libmagickwand-dev && pecl install imagick && docker-php-ext-enable imagick
+RUN apt-get install -y libmagickwand-dev && pecl install imagick-3.5.1 && docker-php-ext-enable imagick
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Install Supervisord
 RUN apt-get install -y supervisor
+
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
+    && npm install -g npm@latest
 
 WORKDIR /var/www
 
