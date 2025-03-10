@@ -150,7 +150,7 @@
                 });
                 await scanner.start(
                     cameraId, {
-                        fps: 10,
+                        fps: 20,
                         qrbox: 350,
                         experimentalFeatures: {
                             useBarCodeDetectorIfSupported: false
