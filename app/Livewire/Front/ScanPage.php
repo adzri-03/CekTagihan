@@ -59,6 +59,6 @@ class ScanPage extends Component
 
         return view('livewire.front.scan-page', [
             'customers' => $customers,
-        ]);
+        ])->extends('layouts.master')->section('content');
     }
 }

@@ -18,13 +18,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory(3)->create();
-
         $user = User::factory()->create([
             'name' => 'admin',
             'email' => 'admin@gmail.com',
             'email_verified_at' => now(),
-            'password' => Hash::make('password'),
+            'password' => Hash::make('tirtohargomaju098'),
             'phone' => fake()->phoneNumber(),
             'role' => 'admin',
             'remember_token' => Str::random(10),
@@ -33,10 +31,5 @@ class DatabaseSeeder extends Seeder
 
         $role = Role::create(['name' => 'admin']);
         $user->assignRole($role);
-
-        Customer::factory(50)->create();
-
-        Golongan::factory(50)->create();
-
     }
 }
