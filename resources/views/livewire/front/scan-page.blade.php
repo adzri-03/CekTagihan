@@ -109,10 +109,10 @@
 <script src="https://unpkg.com/html5-qrcode"></script>
 <script>
     const QRScanner = (() => {
-
         // State
         let scanner = null;
         let isProcessing = false;
+        let isScannerActive = false;
 
         // DOM Elements
         const elements = {
@@ -128,70 +128,53 @@
         const showSuccess = () => elements.success.classList.remove('hidden');
         const hideSuccess = () => elements.success.classList.add('hidden');
 
+        // **Initialize Scanner**
         const initScanner = async () => {
+            if (isScannerActive) return; // Hindari memulai scanner lebih dari sekali
+            isScannerActive = true;
+
             try {
                 showLoading();
-
                 await destroyScanner();
 
-                const cameras = await Html5Qrcode.getCameras();
-                if (!cameras.length) throw new Error('Kamera tidak ditemukan');
-                const hasBackCamera = cameras.some(cam => cam.label.toLowerCase().includes('back'))
-
-                const cameraId = hasBackCamera ?
-                    cameras.find(cam => cam.label.toLowerCase().includes('back')).id :
-                    cameras[0]?.id
-
-                if (!cameraId) throw new Error('Kamera tidak ditemukan 2');
-
-                scanner = new Html5Qrcode('reader', {
-                    verbose: false,
-                    useBarCodeDetectorIfSupported: false
+                scanner = new Html5QrcodeScanner('reader', {
+                    fps: 15, // Optimalkan FPS untuk performa
+                    qrbox: { width: 300, height: 300 }, // Ukuran scanning box
+                    supportedScanFormats: [Html5QrcodeSupportedFormats.QR_CODE],
                 });
-                await scanner.start(
-                    cameraId, {
-                        fps: 20,
-                        qrbox: 350,
-                        experimentalFeatures: {
-                            useBarCodeDetectorIfSupported: false
-                        },
-                        supportedScanFormats: [Html5Qrcode.SCAN_TYPE_QR_CODE]
-                    },
-                    handleScanSuccess,
-                );
-                console.log('Scanner started successfully');
+
+                await scanner.render(handleScanSuccess, handleScanError);
+                console.log('✅ Scanner berhasil dimulai.');
             } catch (error) {
-                console.error('Error, terjadi kesalahan', error.message)
+                console.error('❌ Gagal memulai scanner:', error.message);
+                alert('Terjadi kesalahan saat memulai scanner.');
             } finally {
                 hideLoading();
             }
         };
 
+        // **Destroy Scanner**
         const destroyScanner = async () => {
             if (scanner) {
                 try {
-                    await scanner.stop();
                     await scanner.clear();
                     scanner = null;
+                    isScannerActive = false;
+                    console.log('📴 Scanner dimatikan.');
                 } catch (error) {
-                    console.error('Error stopping scanner:', error);
+                    console.error('⚠️ Gagal menghentikan scanner:', error.message);
                 }
             }
         };
 
-        const retryScanner = async () => {
-            console.log('retried');
-            await destroyScanner();
-            await initScanner();
-        }
-
-        // Event Handlers
+        // **Handle QR Code Success**
         const handleScanSuccess = (decodedText) => {
             if (isProcessing) return;
             isProcessing = true;
 
+            console.log('✅ QR Code Terbaca:', decodedText);
             showSuccess();
-            window.Livewire.dispatch('scan-success', {scanned: decodedText});
+            window.Livewire.dispatch('scan-success', { scanned: decodedText });
 
             setTimeout(() => {
                 hideSuccess();
@@ -199,7 +182,19 @@
             }, 1500);
         };
 
-        // Public Methods
+        // **Handle QR Code Error**
+        const handleScanError = (errorMessage) => {
+            console.warn('⚠️ Error membaca QR:', errorMessage);
+        };
+
+        // **Retry Scanner**
+        const retryScanner = async () => {
+            console.log('🔄 Memulai ulang scanner...');
+            await destroyScanner();
+            await initScanner();
+        };
+
+        // **Modal Controls**
         const openModal = () => {
             elements.modal.classList.remove('hidden');
             elements.modal.classList.add('flex');
@@ -212,7 +207,7 @@
             destroyScanner();
         };
 
-        // Event Listeners
+        // **Event Listeners**
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') closeModal();
         });
@@ -221,11 +216,7 @@
             if (e.target === elements.modal) closeModal();
         });
 
-        // Public API
-        return {
-            openModal,
-            closeModal,
-            retryScanner,
-        };
+        return { openModal, closeModal, retryScanner };
     })();
 </script>
+
