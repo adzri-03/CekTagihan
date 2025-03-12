@@ -57,8 +57,7 @@
         </div>
 
         <!-- Scanner Modal -->
-        <div id="scannerModal"
-            class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 z-50 items-center justify-center">
+        <div id="scannerModal"class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 z-50 items-center justify-center">
             <div class="modal-content relative w-full sm:w-[500px] bg-white rounded-t-lg sm:rounded-lg shadow-xl">
                 <!-- Close Button -->
                 <button onclick="QRScanner.closeModal()"
@@ -70,7 +69,7 @@
                 </button>
 
                 <!-- Modal Content -->
-                <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-6">
                     <div class="text-center">
                         <h3 class="text-lg font-bold text-gray-900">Scan QR Code</h3>
                         <div class="mt-4 flex justify-center">
