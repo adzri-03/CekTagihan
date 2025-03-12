@@ -139,7 +139,7 @@
 
                 scanner = new Html5QrcodeScanner('reader', {
                     fps: 15, // Optimalkan FPS untuk performa
-                    qrbox: { width: 300, height: 300 }, // Ukuran scanning box
+                    qrbox: { width: 300, height: 200 }, // Ukuran scanning box
                     supportedScanFormats: [Html5QrcodeSupportedFormats.QR_CODE],
                 });
 
