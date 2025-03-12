@@ -58,7 +58,7 @@
 
         <!-- Scanner Modal -->
         <div id="scannerModal"
-            class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 z-50 items-end sm:items-center justify-center">
+            class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 z-50 items-center justify-center">
             <div class="modal-content relative w-full sm:w-[500px] bg-white rounded-t-lg sm:rounded-lg shadow-xl">
                 <!-- Close Button -->
                 <button onclick="QRScanner.closeModal()"
