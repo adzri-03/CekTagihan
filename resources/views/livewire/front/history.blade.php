@@ -62,6 +62,7 @@
                         <table class="min-w-max border border-gray-300 rounded-lg shadow-sm">
                             <thead class="bg-gray-100"
                                 <tr>
+                                    <th class="border px-4 py-2 text-left text-xm whitespace-nowrap">Nama</th>
                                     <th class="border px-4 py-2 text-left text-xm whitespace-nowrap">Tanggal</th>
                                     <th class="border px-4 py-2 text-left text-xm  whitespace-nowrap">Meter Awal</th>
                                     <th class="border px-4 py-2 text-left text-xm  whitespace-nowrap">Meter Akhir</th>
@@ -73,6 +74,7 @@
                             <tbody>
                                 @foreach ($history as $item)
                                     <tr class="bg-white hover:bg-gray-50">
+                                        <td class="border px-4 py-2 text-xm">{{ $item->customer->name }}</td>
                                         <td class="border px-4 py-2 text-xm">{{ $item->created_at->format('d M Y') }}</td>
                                         <td class="border px-4 py-2 text-xm">{{ $item->meter_awal }}</td>
                                         <td class="border px-4 py-2 text-xm">{{ $item->meter_akhir }}</td>
@@ -97,12 +99,11 @@
             <!-- MODAL -->
             <div x-show="openModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" x-transition>
                 <div class="bg-white rounded-lg shadow-lg w-96 p-6 relative">
-                    <button @click="openModal = false" class="absolute top-3 right-3 text-gray-500 hover:text-red-500">
-                        ✖
-                    </button>
+                    <button @click="openModal = false" class="absolute top-3 right-3 text-gray-500 hover:text-red-500">✖</button>
                     <h2 class="text-xl font-bold mb-4 text-center">Invoice Pembacaan Meter</h2>
                     
                     <div class="bg-gray-100 p-4 rounded-lg shadow-inner">
+                        <p><strong>Nama:</strong> <span x-text="invoiceData.customer.name"></span></p>
                         <p><strong>Tanggal:</strong> <span x-text="invoiceData.created_at"></span></p>
                         <p><strong>Meter Awal:</strong> <span x-text="invoiceData.meter_awal"></span></p>
                         <p><strong>Meter Akhir:</strong> <span x-text="invoiceData.meter_akhir"></span></p>
@@ -111,8 +112,7 @@
                     </div>
                     
                     <div class="mt-4 flex justify-between">
-                        <button @click="openModal = false"
-                            class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">Tutup</button>
+                        <button @click="openModal = false" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">Tutup</button>
                         <a :href="'/download-invoice/' + invoiceData.id" target="_blank"
                             class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">Download PDF</a>
                     </div>

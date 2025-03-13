@@ -16,6 +16,7 @@
 <body>
     <div class="container">
         <h2>Invoice </h2>
+        <p><strong>Nama :</strong> {{ $invoice->customer->name }}</p>
         <p><strong>Tanggal:</strong> {{ $invoice->created_at->format('d M Y') }}</p>
         <p><strong>Meter Awal:</strong> {{ $invoice->meter_awal }}</p>
         <p><strong>Meter Akhir:</strong> {{ $invoice->meter_akhir }}</p>

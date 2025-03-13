@@ -34,7 +34,10 @@ class RiwayatPetugasResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user_id'),
+                Tables\Columns\TextColumn::make('user.name')
+                ->label('Nama Petugas')
+                ->sortable()
+                ->searchable(),
                 Tables\Columns\TextColumn::make('deskripsi'),
                 Tables\Columns\TextColumn::make('jenis_tindakan'),
                 Tables\Columns\TextColumn::make('related_id'),
@@ -63,8 +66,13 @@ class RiwayatPetugasResource extends Resource
     {
         return [
             'index' => Pages\ListRiwayatPetugas::route('/'),
-            'create' => Pages\CreateRiwayatPetugas::route('/create'),
+            // 'create' => Pages\CreateRiwayatPetugas::route('/create'),
             'edit' => Pages\EditRiwayatPetugas::route('/{record}/edit'),
         ];
     }
+
+    public static function canCreate(): bool
+{
+    return false;
+}
 }

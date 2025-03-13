@@ -20,6 +20,6 @@ class PembacaanMeter extends Model
     ];
 
     public function customer() {
-        return $this->belongsTo(Customer::class);
+        return $this->belongsTo(Customer::class, 'customer_id');
     }
 }
