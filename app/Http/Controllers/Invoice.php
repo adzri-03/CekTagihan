@@ -12,8 +12,9 @@ class Invoice extends Controller
     {
         $invoice = PembacaanMeter::findOrFail($id);
         
-        $pdf = Pdf::loadView('invoice-pdf', compact('invoice'));
+        $pdf = Pdf::loadView('invoice-pdf', compact('invoice'))
+        ->setPaper('A4', 'potrait');
         
-        return $pdf->download('invoice_'.$invoice->id.'.pdf');
+        return $pdf->stream('invoice_'.$invoice->id.'.pdf');
     }
 }
